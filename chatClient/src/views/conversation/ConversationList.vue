@@ -156,6 +156,7 @@ export default {
 .conversationlist-com {
   height: 100%;
   padding: 0 5px;
+  background-image: url('../../../static/image/004.jpg');
   .search {
     padding: 10px 0;
   }
@@ -163,20 +164,20 @@ export default {
     padding-bottom: 10px;
   }
   .el-tabs.el-tabs--top.el-tabs--border-card {
-    height: calc(100% - 120px);
+    height: calc(100% - 70px);
     overflow-x: hidden;
-    background-color: $normalbg;
+    background-image: url('../../../static/image/004.jpg');
     .el-tabs__header {
-      background-color: $seatbg;
+      background-color: #fff;
       // background-color: $secondarybg;
       .el-tabs__item.is-active {
-        background-color: $normalbg;
+        background-image: url('../../../static/image/004.jpg');
       }
     }
     .el-tabs__content {
       padding: 0;
       height: calc(100% - 40px);
-      background-color: $normalbg;
+      background-image: url('../../../static/image/004.jpg');
       // overflow: scroll;
       // overflow-x: hidden;
       position: relative;

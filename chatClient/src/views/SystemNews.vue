@@ -1,5 +1,8 @@
 <template>
   <div class="system-page" :style="device === 'Mobile' ? {width: '100%'} : {}">
+    <router-link to="/">
+      <span class="out">❌</span>
+    </router-link>
     <p class="title">我的系统消息</p>
     <validate-news :validateNewsList="validateNewsList" @changeValidateNewsStatus="changeValidateNewsStatus" />
   </div>
@@ -62,6 +65,11 @@ export default {
 
 <style lang="scss">
 .system-page {
+  .out {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
   .title {
     margin-top: 0;
   }

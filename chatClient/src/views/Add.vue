@@ -1,30 +1,18 @@
 <template>
   <div class="add-page">
+    <router-link to="/">
+      <span class="out">❌</span>
+    </router-link>
     <div class="header">
       <div class="search-area">
-        <el-input
-          placeholder="请输入内容"
-          prefix-icon="el-icon-search"
-          v-model="searchKey"
-          maxlength="20"
-          @input="keyWordChange"
-        >
+        <el-input placeholder="请输入内容" prefix-icon="el-icon-search" v-model="searchKey" maxlength="20"
+          @input="keyWordChange">
         </el-input>
         <el-select v-model="searchObject" placeholder="请选择搜索对象" @change="fetch(false, true)">
-          <el-option
-            v-for="item in searchObjectMap"
-            :key="item.id"
-            :label="item.label"
-            :value="item.value"
-          />
+          <el-option v-for="item in searchObjectMap" :key="item.id" :label="item.label" :value="item.value" />
         </el-select>
         <el-select v-model="searchType" placeholder="请选择" @change="fetch(false, true)">
-          <el-option
-            v-for="item in searchTypes[searchObject]"
-            :key="item.id"
-            :label="item.label"
-            :value="item.value"
-          />
+          <el-option v-for="item in searchTypes[searchObject]" :key="item.id" :label="item.label" :value="item.value" />
         </el-select>
       </div>
       <div class="condition-list">
@@ -39,17 +27,11 @@
         <div class="description" v-if="searchList.length">
           一共搜索到{{searchList.length}}条结果
         </div>
-        <empty-svg  class="no-data" v-if="searchList.length === 0" width="200" height="200" />
+        <empty-svg class="no-data" v-if="searchList.length === 0" width="200" height="200" />
         <user-list :searchlist="searchList" v-if="searchObject === 'friend'" />
         <group-list :searchlist="searchList" v-else-if="searchObject === 'group'" />
         <div class="no-more" v-if="searchList.length && !hasMore">
-          <el-alert
-            title="没有更多了..."
-            type="info"
-            center
-            show-icon
-            :closable="false"
-          />
+          <el-alert title="没有更多了..." type="info" center show-icon :closable="false" />
         </div>
       </div>
     </div>
@@ -185,6 +167,11 @@ export default {
   height: 100%;
   padding: 10px 0;
   overflow-y: scroll;
+  .out {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
   // margin: 0 auto;
   .header {
     .search-area {

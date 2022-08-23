@@ -63,7 +63,7 @@
               @click="doLike(item._id, pyqIndex)"
               :style="(hasILike[item._id] || []).includes(userInfo._id) ? 'color: #c35673' : ''"
             />
-            <i class="item iconfont icon-zhuanfa farward" title="转发"></i>
+            <!-- <i class="item iconfont icon-zhuanfa farward" title="转发"></i> -->
           </div>
         </div>
         <div class="comment-like">
@@ -93,7 +93,7 @@
             @click.stop="handlerShowEmoji($event, item._id)"
             title="添加表情"
           />
-          <el-button type="success" size="mini" @click="doComment(item._id, pyqIndex)">评论</el-button>
+          <el-button style="background:#dddd" size="mini" @click="doComment(item._id, pyqIndex)">评论</el-button>
         </div>
       </div>
       <div class="loading">
@@ -481,9 +481,7 @@ export default {
             &:hover {
               color: #c35673;
             }
-            width: 40px;
-            height: 40px;
-            margin-left: 20px;
+            margin-left: 0px;
             font-size: 20px;
             cursor: pointer;
           }

@@ -3,7 +3,8 @@
     <transition name="roll">
       <div class="header-wrapper" v-if="currentConversation.roomid">
         <div class="header-title">
-          <i @click="setCurrentUI" v-if="device === 'Mobile'" style="margin-left: -15px;" class="el-icon-arrow-left"></i>
+          <i @click="setCurrentUI" v-if="device === 'Mobile'" style="margin-left: -15px;"
+            class="el-icon-arrow-left"></i>
           <span>{{haderTitle}}</span>
           <!-- <i :class="!showSettingPanel ? 'el-icon-arrow-down curp' : 'el-icon-arrow-up curp'"></i> -->
           <!-- <i class="icon-qun iconfont iconic iconic-group" v-if="currentConversation.conversationType === 'GROUP'"></i> -->
@@ -12,10 +13,7 @@
         <div class="header-operation">
           <span v-if="!currentConversation.isGroup">
             <el-tooltip class="item" effect="dark" content="白板协作需要良好的网络环境" placement="top">
-              <i
-                v-if="device !== 'Mobile'"
-                class="operation-item iconfont icon-huaban"
-                @click="enterArtBoard"></i>
+              <i v-if="device !== 'Mobile'" class="operation-item iconfont icon-huaban" @click="enterArtBoard"></i>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="视频通话需要良好的网络环境" placement="top">
               <i class="operation-item iconfont icon-shipin" @click="videoCall"></i>
@@ -24,15 +22,16 @@
               <i class="operation-item el-icon-phone-outline" @click="audioCall"></i>
             </el-tooltip>
           </span>
-          <i class="operation-item el-icon-menu" title="设置" @click.stop="toggleShowSettingPanel"></i>
+          <!-- <i class="operation-item el-icon-menu" title="放大" @click.stop="toggleShowSettingPanel"></i> -->
+          <i class="operation-item el-icon-menu" title="放大" @click.stop="zoom"></i>
         </div>
       </div>
     </transition>
-    <transition name="roll">
+    <!-- <transition name="roll">
       <div class="setting-panel" v-if="showSettingPanel">
         <setting-panel :current-conversation="currentConversation" @setCurrentConversation="setCurrentConversation" />  
       </div>      
-    </transition>
+    </transition> -->
   </div>
 </template>
 
@@ -93,13 +92,16 @@ export default {
       this.$store.dispatch('app/SET_IS_AUDIOING', true)
       this.$eventBus.$emit('web_rtc_msg', { type: WEB_RTC_MSG_TYPE.audio})
     },
-    toggleShowSettingPanel() {
-      this.showSettingPanel = !this.showSettingPanel
+    zoom(){
+
     },
-    watchDocumentClick() {
-      if (!this.showSettingPanel) return
-      this.toggleShowSettingPanel()
-    },
+    // toggleShowSettingPanel() {
+    //   this.showSettingPanel = !this.showSettingPanel
+    // },
+    // watchDocumentClick() {
+    //   if (!this.showSettingPanel) return
+    //   this.toggleShowSettingPanel()
+    // },
     setCurrentUI() {
       this.$store.dispatch('device/SET_CURRENT_UI', 'conversation')
     }
@@ -114,12 +116,12 @@ export default {
   components: {
     settingPanel
   },
-  mounted() {
-    document.addEventListener('click', this.watchDocumentClick)
-  },
-  beforeDestroy() {
-    document.removeEventListener('click', this.watchDocumentClick)
-  },
+  // mounted() {
+  //   document.addEventListener('click', this.watchDocumentClick)
+  // },
+  // beforeDestroy() {
+  //   document.removeEventListener('click', this.watchDocumentClick)
+  // },
 }
 </script>
 

@@ -1,4 +1,5 @@
 <template>
+<!--                                                                 无用                                               -->
   <div class="layout-header__com">
     <el-header>
       <div class="logo">
@@ -7,7 +8,7 @@
           <span class="logo-img"></span>
         </router-link>
       </div>
-      <div class="operation">
+      <!-- <div class="operation">
         <span class="item">
           <router-link to="/add" tag="span">
             加好友 <i class="el-icon-plus"></i>
@@ -18,7 +19,7 @@
             发动态 <i class="el-icon-plus"></i>
           </router-link>
         </span>
-      </div>
+      </div> -->
       <div class="user-info">
         <el-dropdown class="droplist">
           <span class="el-dropdown-link">
@@ -33,12 +34,12 @@
             </el-badge>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item class="user-menu-item">
+            <!-- <el-dropdown-item class="user-menu-item">
               <router-link to="/setting" class="link">
                 个人设置
               </router-link>
-            </el-dropdown-item>
-            <el-dropdown-item class="user-menu-item">
+            </el-dropdown-item> -->
+            <!-- <el-dropdown-item class="user-menu-item">
               <el-badge
                 :value="validateUnReadCount"
                 :hidden="validateUnReadCount === 0"
@@ -47,20 +48,20 @@
                   系统消息
                 </router-link>
               </el-badge>
-            </el-dropdown-item>
+            </el-dropdown-item> -->
             <el-dropdown-item class="user-menu-item">
               <router-link to="/setting" class="link">
                 主题设置
               </router-link>
             </el-dropdown-item>
-            <el-dropdown-item class="user-menu-item">
+            <!-- <el-dropdown-item class="user-menu-item">
               <router-link to="/setting" class="link">
                 反馈
               </router-link>
-            </el-dropdown-item>
+            </el-dropdown-item> -->
             <el-dropdown-item class="user-menu-item">
               <a class="link" @click="logout">
-                退出
+                退出登录
               </a>
             </el-dropdown-item>
           </el-dropdown-menu>

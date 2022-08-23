@@ -1,7 +1,6 @@
 <template>
   <div class="conversation-top-search-cmp">
-    <search placeholder="请输入搜索内容" @search="search">
-      
+    <search placeholder="请输入搜索内容" @search="search"> 
     </search>
   </div>
 </template>

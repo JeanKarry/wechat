@@ -3,71 +3,38 @@
     <div class="mzone-wrapper">
       <div v-if="device === 'Mobile'" class="goback el-icon-arrow-left" @click="$router.go(-1)" />
       <div class="mzone-top">
-        <div class="carousel" :style="'backgroundImage:url(' + IMG_URL + userInfo.cover [0] + ')'">
-          
+        <router-link to="/">
+          <span class="out"><img src="../../../static/image/返回.png" width="30" height="30" /></span>
+        </router-link>
+        <div class="carousel">
         </div>
         <div class="info">
-          <el-avatar
-            class="avatar"
-            size="large"
-            :src="IMG_URL + userInfo.photo"
-            @error="() => true"
-          >
-            <img
-              src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
-            >
+          <el-avatar class="avatar" size="large" :src="IMG_URL + userInfo.photo" @error="() => true">
+            <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png">
           </el-avatar>
           <span class="nickname">{{userInfo.nickname}}</span>
         </div>
       </div>
       <!-- <suck-top :top="30" parent=".mzone-page" :z-index="1004"> -->
-        <div ref="navtop" class="mzone-nav" :style="{width: navTopWidth + 'px'}">
-          <el-menu :default-active="activeTab" @select="tabSelect" class="el-menu-demo" mode="horizontal">
-            <el-menu-item index="pyq">好友动态</el-menu-item>
-            <el-menu-item index="my-mzone">我的空间</el-menu-item>
-            <el-menu-item index="blog">博客</el-menu-item>
-          </el-menu>
-        </div>
+      <div ref="navtop" class="mzone-nav" :style="{width: navTopWidth + 'px'}">
+        <el-menu :default-active="activeTab" @select="tabSelect" class="el-menu-demo" mode="horizontal">
+          <el-menu-item index="pyq">好友动态</el-menu-item>
+          <!-- <el-menu-item index="my-mzone">我的空间</el-menu-item> -->
+          <!-- <el-menu-item index="blog">博客</el-menu-item> -->
+        </el-menu>
+      </div>
       <!-- </suck-top> -->
       <div :class="device === 'Mobile' ? 'mzone-body mobile' : 'mzone-body'">
-        <!-- <div class="menulist">
-          <suck-top :top="70" parent=".mzone-page" :z-index="1004">
-            <div class="menulist" :style="{width: menulistWidth + 'px'}">
-              <el-menu
-                default-active="2"
-                class="el-menu-vertical-demo"
-              >
-                <el-menu-item index="2">
-                  <i class="el-icon-menu"></i>
-                  <span slot="title">导航二</span>
-                </el-menu-item>
-                <el-menu-item index="3" disabled>
-                  <i class="el-icon-document"></i>
-                  <span slot="title">导航三</span>
-                </el-menu-item>
-                <el-menu-item index="4">
-                  <i class="el-icon-setting"></i>
-                  <span slot="title">导航四</span>
-                </el-menu-item>
-              </el-menu>
-            </div>
-          </suck-top>
-        </div> -->
-        
         <div v-show="activeTab === 'pyq'" class="content">
           <send-mzone @watchsend="watchSendPyq" />
-          <m-pyq
-            :pyq-list-data="myFriendPyqList"
-            :has-more="hasMorePyq"
-            @modifyPyq="modifyPyq"
-            @getPyq="getMyFriendPyq"
-          />
+          <m-pyq :pyq-list-data="myFriendPyqList" :has-more="hasMorePyq" @modifyPyq="modifyPyq"
+            @getPyq="getMyFriendPyq" />
         </div>
-        <div v-show="activeTab === 'blog'" class="content blog">
+        <!-- <div v-show="activeTab === 'blog'" class="content blog">
           <blog />
-        </div>
+        </div> -->
       </div>
-      <back-top target=".mzone-page" />
+      <!-- <back-top target=".mzone-page" /> -->
     </div>
   </div>
 </template>
@@ -83,10 +50,9 @@ export default {
   data() {
     return {
       IMG_URL: process.env.IMG_URL,
-      activeTab: 'blog',
+      activeTab: 'pyq',
       navTopWidth: 0,
       menulistWidth: 0,
-
       newPyqItem: {}, // 用户新发表的朋友圈
       myFriendPyqList: [], // 我的好友的朋友圈李彪
       hasMorePyq: true,
@@ -150,18 +116,25 @@ export default {
     // const menulistWidth = window.getComputedStyle(menulist).width
     this.navTopWidth = parseInt(mzoneWrapperWidth)
     // this.menulistWidth = parseInt(menulistWidth)
+    console.log(this.$store.state.user.userInfo)
   },
 }
 </script>
 
 <style lang="scss" scoped>
 .mzone-page {
-  width: 100%;
+  width: 101%;
   background-color: #e9ebee;
   height: 100%;
-  padding: 0 10px;
   overflow-y: scroll;
-  .mzone-wrapper {
+  .out {
+      position: absolute;
+      z-index: 1000;
+      right: 20px;
+      top: 10px;
+      color: #ffffff;
+    }
+.mzone-wrapper {
     .goback {
       position: absolute;
       left: 15px;
@@ -176,16 +149,15 @@ export default {
       margin-bottom: 10px;
       .carousel {
         height: 190px;
-        background-size: cover;
-        background-repeat: no-repeat;
+        background: #000;
       }
       .info {
         display: flex;
         align-items: center;
         position: absolute;
         bottom: -10px;
+        left: 38%;
         z-index: 999;
-        padding: 0 10px;
         // height: 60px;
         .avatar {
           width: 100px;
@@ -206,19 +178,19 @@ export default {
           .is-active {
             position: relative;
             border-bottom: none;
-            // &::before {
-            //   position: absolute;
-            //   bottom: 0;
-            //   left: 50%;
-            //   transform: translateX(-50%);
-            //   transition: all .5s ease;
-            //   content: '';
-            //   width: 0;
-            //   height: 0;
-            //   border-bottom: 10px solid #e9ebee;
-            //   border-left: 10px solid transparent;
-            //   border-right: 10px solid transparent;
-            // }
+            &::before {
+              position: absolute;
+              bottom: 0;
+              left: 50%;
+              transform: translateX(-50%);
+              transition: all .5s ease;
+              content: '';
+              width: 0;
+              height: 0;
+              border-bottom: 10px solid #e9ebee;
+              border-left: 10px solid transparent;
+              border-right: 10px solid transparent;
+            }
           }
         }
         .el-tabs__content {
@@ -235,8 +207,9 @@ export default {
         width: 20%;
       }
       .content {
-        width: 70%;
+        width: 100%;
         margin-left: 25px;
+        margin-right: 25px;
         &.blog {
           margin-left: 0;
         }

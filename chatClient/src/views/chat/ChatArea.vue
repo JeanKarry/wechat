@@ -1,9 +1,13 @@
 <template>
   <div class="chat-area__com">
-    <chat-header
-      :currentConversation="currentConversation"
-      :set-current-conversation="setCurrentConversation"
-    />
+    <!-- 关闭聊天页面显示后  -->
+    <div class="showBg" v-show="open">
+      <div style="margin-top:20%">
+        <chat-svg width="400" height="300" />
+      </div>
+      <p>聊天~打开心灵的窗户</p>
+    </div>
+    <chat-header :currentConversation="currentConversation" :set-current-conversation="setCurrentConversation" />
     <transition name="slide-up">
       <div class="history-msg-container" v-if="showHistoryMsg">
         <history-msg :current-conversation="currentConversation" />
@@ -11,17 +15,10 @@
     </transition>
     <div :class="currentConversation.conversationType !== 'GROUP' ? 'main no-group' : 'main'">
       <div class="message-list-container">
-        <message-list ref='messagelist'
-          @load-message="loadmessage"
-          :messagelist="messagesOutcome"
-          :scrollbottom="scrollBottom"
-          :hasmore="hasMore"
-          :isloading="isLoading"
-          :useanimation="useAnimation"
-          :currentConversation="currentConversation"
-          :last-enter-time="lastEnterTime"
-          :set-last-enter-time="setLastEnterTime"
-        />
+        <message-list ref='messagelist' @load-message="loadmessage" :messagelist="messagesOutcome"
+          :scrollbottom="scrollBottom" :hasmore="hasMore" :isloading="isLoading" :useanimation="useAnimation"
+          :currentConversation="currentConversation" :last-enter-time="lastEnterTime"
+          :set-last-enter-time="setLastEnterTime" />
       </div>
       <div class="group-desc" v-if="device !== 'Mobile' && currentConversation.conversationType === 'GROUP'">
         <group-desc :currentConversation="currentConversation" :key="datetamp" />
@@ -29,49 +26,37 @@
     </div>
     <div class="message-edit-container">
       <div class="send-type">
-        <i class="item iconfont icon-emoji" @click.stop="showEmojiCom = !showEmojiCom"></i>
-        <i class="item el-icon-picture" @click.stop="showUpImgCom = !showUpImgCom" />
+        <i class="item iconfont icon-emoji" @click.stop="showEmojiCom = !showEmojiCom" title="emoji表情"></i>
+        <i class="item el-icon-picture" @click.stop="showUpImgCom = !showUpImgCom" title="选择图片" />
         <label for="upfile">
           <el-tooltip class="item" effect="dark" content="只能上传小于 2M 的文件" placement="top">
             <i class="item el-icon-folder">
-              <input
-                id="upfile"
-                class="file-inp upload"
-                type="file"
-                title="选择文件"
-                @change="fileInpChange"
-              >
+              <input id="upfile" class="file-inp upload" type="file" title="选择文件" @change="fileInpChange">
             </i>
           </el-tooltip>
         </label>
-        <i class="item iconfont icon-huaban" />
+        <!-- <i class="item iconfont icon-huaban" />
         <i class="item iconfont icon-shipin" />
-        <i class="item el-icon-phone-outline" />
+        <i class="item el-icon-phone-outline" /> -->
         <span
           :class="showHistoryMsg ? 'history-btn normal-font el-icon-caret-bottom' : 'history-btn normal-font el-icon-caret-top'"
           @click="setShowHistoryMsg">历史记录</span>
       </div>
       <div class="operation">
-        <el-button @click="send" type="success" size="small" round>发送</el-button>
-        <el-button @click="send" type="danger" size="small" round>清空</el-button>
+        <el-button @click="close" type="danger" size="small">关闭</el-button>
+        <el-button @click="send" type="success" size="small">发送</el-button>
       </div>
       <div style="display: none" contenteditable="true" class="textarea" @input="test">
 
       </div>
-      <textarea ref="chatInp" class="textarea" v-model="messageText" maxlength="200" @input="scrollBottom = true" @keydown.enter="send($event)"></textarea>
+      <textarea ref="chatInp" class="textarea" v-model="messageText" maxlength="200" @input="scrollBottom = true"
+        @keydown.enter="send($event)"></textarea>
       <transition name="fade">
-        <up-img
-          v-if="showUpImgCom"
-          class="emoji-component"
-          :token="token"
-          @getStatus="getImgUploadResult"
-          @getLocalUrl="getLocalUrl"
-          :get-status="getImgUploadResult"
-          :get-local-url="getLocalUrl"
-        />
+        <up-img v-if="showUpImgCom" class="emoji-component" :token="token" @getStatus="getImgUploadResult"
+          @getLocalUrl="getLocalUrl" :get-status="getImgUploadResult" :get-local-url="getLocalUrl" />
       </transition>
       <transition name="fade">
-        <custom-emoji v-if="showEmojiCom" class="emoji-component" @addemoji="addEmoji" />        
+        <custom-emoji v-if="showEmojiCom" class="emoji-component" @addemoji="addEmoji" />
       </transition>
     </div>
   </div>
@@ -90,6 +75,7 @@ import upImg from '@/components/customUploadImg'
 import groupDesc from './components/GroupDesc'
 import historyMsg from './components/HistoryMsg'
 import xss from '@/utils/xss'
+import chatSvg from '@/SVGComponents/chat'
 export default {
   props: {
     currentConversation: Object,
@@ -98,6 +84,7 @@ export default {
   },
   data() {
     return {
+      open:false,
       messageText: "",
       messages: [],
       showEmojiCom: false,
@@ -273,6 +260,9 @@ export default {
       })
       this.messageText = ""
     },
+    close(){
+      this.open = false
+    },
     joinChatRoom() {
       this.$socket.emit("join", this.currentConversation)
     },
@@ -362,7 +352,8 @@ export default {
     customEmoji,
     groupDesc,
     upImg,
-    historyMsg
+    historyMsg,
+    chatSvg
   },
   watch: {
     currentConversation(newVal, oldVal) {
@@ -405,6 +396,17 @@ export default {
 .chat-area__com {
   position: relative;
   height: 100%;
+  .showBg{
+    position: absolute;
+    z-index: 100000;
+    background: #fff;
+    text-align: center;
+    line-height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
   .history-msg-container {
     position: absolute;
     z-index: 1004;

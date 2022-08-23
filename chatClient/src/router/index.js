@@ -76,6 +76,7 @@ const router = new Router({
           path: 'mzone',
           name: 'MZone',
           component: () => import('@/views/MZone/index'),
+          linkActiveClass:'active',
           meta: {
             requiresAuth: true
           },

@@ -1,11 +1,14 @@
 <template>
   <div class="setting-page" :style="device === 'Mobile' ? {width: '95%'} : {}">
+    <router-link to="/">
+      <span class="out">❌</span>
+    </router-link>
     <div class="header">
       <div class="avatar">
         <img :src="IMG_URL + userInfo.photo" alt="" srcset="">
       </div>
       <div class="info-list">
-        <div class="info-item">MessagerId：{{userInfo.code}}</div>
+        <!-- <div class="info-item">MessagerId：{{userInfo.code}}</div> -->
         <div class="info-item">账号：{{userInfo.name}}</div>
         <div class="info-item">注册时间：{{userInfo.signUpTime | formatDate}}</div>
         <div class="info-item">登录时间：{{userInfo.lastLoginTime | formatDate}}</div>
@@ -13,71 +16,46 @@
     </div>
     <div class="body">
       <div class="nav-list">
-        <span
-          :class="currentTab === 'setting' ? 'operation-text isactive' : 'operation-text'"
+        <span :class="currentTab === 'setting' ? 'operation-text isactive' : 'operation-text'"
           @click="setCurrentTab('setting')">个人资料</span>
-        <span
-          :class="currentTab === 'password' ? 'operation-text isactive' : 'operation-text'"
-          @click="setCurrentTab('password')"
-        >
+        <span :class="currentTab === 'password' ? 'operation-text isactive' : 'operation-text'"
+          @click="setCurrentTab('password')">
           密码设置
         </span>
       </div>
       <div class="content" v-loading="fetching">
         <ul v-show="currentTab === 'setting'" class="user-setting-list">
-          <li
-            class="setting-item"
-            v-for="item in settingList"
-            :key="item"
-          >
+          <li class="setting-item" v-for="item in settingList" :key="item">
             <span class="title">{{listZHMap[item]}}</span>
             <div class="inp-box">
               <template v-if="item === 'sex'">
-                <el-radio-group v-model="userSetting[item]" :disabled="!isModifying[item]" size="mini">
+                <!-- <el-radio-group v-model="userSetting[item]" :disabled="!isModifying[item]" size="mini">
                   <el-radio-button label="0">男</el-radio-button>
                   <el-radio-button label="1">女</el-radio-button>
                   <el-radio-button label="3">保密</el-radio-button>
-                </el-radio-group>
+                </el-radio-group> -->
               </template>
               <template v-else>
-                <input
-                  type="text"
-                  :ref="item"
-                  :disabled="!isModifying[item]"
-                  v-model="userSetting[item]"
-                >
+                <input type="text" style="color:#000" :ref="item" :disabled="!isModifying[item]" v-model="userSetting[item]">
               </template>
             </div>
             <div class="action">
-              <span
-                v-show="!isModifying[item]"
-                class="operation-text"
-                @click="setModily(item, true)"
-              >
+              <span v-show="!isModifying[item]" class="operation-text" @click="setModily(item, true)">
                 修改
               </span>
               <div class="oper" v-show="isModifying[item]">
-                <span class="operation-text__danger" @click="saveModify(item)">保存</span>
-                <span class="operation-text__danger" @click="setModily(item, false)">取消</span>
+                <el-button type="primary" size="small" @click="saveModify(item)">保存</el-button>
+                <el-button type="error" size="small" @click="setModily(item, false)">取消</el-button>
               </div>
             </div>
           </li>
         </ul>
         <ul v-show="currentTab === 'password'" class="user-password">
-          <li
-            class="pwd-item"
-            v-for="(value, key) in pwdMap"
-            :key="key"
-          >
+          <li class="pwd-item" v-for="(value, key) in pwdMap" :key="key">
             <span class="title">{{value}}</span>
             <div class="inp-box">
-              <input
-                :placeholder="pwdPlaceholder[key]"
-                type="text"
-                autocomplete="new-password"
-                onfocus="this.type = 'password'"
-                v-model="pwdSetting[key]"
-              />
+              <input :placeholder="pwdPlaceholder[key]" type="text" autocomplete="new-password"
+                onfocus="this.type = 'password'" v-model="pwdSetting[key]" style="color:#000;"/>
             </div>
           </li>
           <div class="action">
@@ -219,12 +197,17 @@ export default {
 <style lang="scss">
 @import './../../static/css/var.scss';
 .setting-page {
-  height: 95%;
-  width: 70%;
+  position: relative;
+  height: 100%;
+  width: 100%;
   padding: 20px;
-  margin: 10px auto;
   box-shadow: 0 1px 2px 0 #ffffff;
-  background-color: $primarybg;
+  background-color: #dddd;
+  .out{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
   .header {
     display: flex;
     .avatar {
@@ -250,8 +233,21 @@ export default {
   .body {
     .nav-list {
       margin: 10px 0;
+      display: flex;
+      flex-direction: row;
       .isactive {
-        background-color: #cccccc;
+        background: #000;
+        color: #fff;
+      }
+      .operation-text{
+        display: block;
+        width: 120px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        border-radius: 0;
+        margin-right: 20px;
+        
       }
     }
     .content {

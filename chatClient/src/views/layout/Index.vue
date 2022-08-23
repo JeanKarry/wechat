@@ -5,7 +5,7 @@
     </div>
     <transition name="fade">
       <main v-show="showMain" class="co-messager-layout">
-        <my-header></my-header>
+        <!-- <my-header></my-header> -->
         <!-- filter-bgc是用于设置背景虚化的，因为使用了filter以及transform后fixed会改变 -->
         <div
           v-if="!device === 'Mobile'"

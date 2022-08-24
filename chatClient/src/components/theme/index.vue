@@ -10,10 +10,6 @@
           <el-slider :step="0.1" v-model="opacity" :min="0.1" :max="1" @change="opacityChange"></el-slider>
         </div>
         <div class="theme-item">
-          <p class="title">毛玻璃效果模糊度（{{blur}}）</p>
-          <el-slider v-model="blur" :max="100" @change="blurChange"></el-slider>
-        </div>
-        <div class="theme-item">
           <p class="title">背景图片</p>
           <el-radio-group v-model="bgImg" size="small" @change="bgImgChange">
             <el-radio label="abstract" border>抽象</el-radio>

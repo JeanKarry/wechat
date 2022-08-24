@@ -23,7 +23,7 @@
           </el-badge>
           
           <div class="conversation-detail">
-            <span class="top-item primary-font detail-item ellipsis space-bw" style="display: flex">
+            <span class="top-item primary-font detail-item ellipsis space-bw" style="display: flex;">
               <span class="ellipsis">{{conversationInfo.groupId.title}}</span>
             </span>
             <span class="bottom-item secondary-font detail-item ellipsis space-bw" style="display: flex">
@@ -209,8 +209,9 @@ export default {
   cursor: pointer;
   &:hover {
     .wrapper {
-      background-color: rgba(0, 0, 0, 0.1);
-      transition: all 0.5s ease-in;
+      background-color: var(--primary-bgcolor-7);
+      color: #fff !important;
+      transition: all 0.2s ease-in;
     }
     .el-icon-more {
       display: block;
@@ -221,20 +222,19 @@ export default {
   }
   &.active {
     .wrapper {
-      background-color: rgba(0, 0, 0, 0.1);
-      transition: all 0.5s ease-in;
+      background-color: var(--primary-bgcolor-7);
+      color:#fff !important;
+      transition: all 0.2s ease-in;
     }
   }
   .conversation-info {
     width: 100%;
     height: 60px;
-    padding: 0 10px;
     .wrapper {
       display: flex;
       height: 60px;
       padding: 0 5px;
       align-items: center;
-      border-radius: 10px;
       overflow: hidden;
       .el-badge {
         top: 4px;

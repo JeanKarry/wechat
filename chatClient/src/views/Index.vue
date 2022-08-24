@@ -145,6 +145,7 @@ export default {
   }
   .conversation-chat-area {
     position: relative;
+    background: #fffffe;
     width: 70%;
     &.mobile {
       // position: absolute;

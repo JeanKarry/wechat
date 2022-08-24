@@ -29,11 +29,11 @@
             <span class="title">{{listZHMap[item]}}</span>
             <div class="inp-box">
               <template v-if="item === 'sex'">
-                <!-- <el-radio-group v-model="userSetting[item]" :disabled="!isModifying[item]" size="mini">
+                <el-radio-group v-model="userSetting[item]" :disabled="!isModifying[item]" size="mini">
                   <el-radio-button label="0">男</el-radio-button>
                   <el-radio-button label="1">女</el-radio-button>
                   <el-radio-button label="3">保密</el-radio-button>
-                </el-radio-group> -->
+                </el-radio-group>
               </template>
               <template v-else>
                 <input type="text" style="color:#000" :ref="item" :disabled="!isModifying[item]" v-model="userSetting[item]">
@@ -54,7 +54,7 @@
           <li class="pwd-item" v-for="(value, key) in pwdMap" :key="key">
             <span class="title">{{value}}</span>
             <div class="inp-box">
-              <input :placeholder="pwdPlaceholder[key]" type="text" autocomplete="new-password"
+              <input :placeholder="pwdPlaceholder[key]" type="text" autocomplete=false
                 onfocus="this.type = 'password'" v-model="pwdSetting[key]" style="color:#000;"/>
             </div>
           </li>
@@ -236,7 +236,7 @@ export default {
       display: flex;
       flex-direction: row;
       .isactive {
-        background: #000;
+        background-color: var(--primary-bgcolor-7);
         color: #fff;
       }
       .operation-text{
@@ -271,7 +271,18 @@ export default {
               border: none;
               outline: none;
               background-color: transparent;
-              color: $secondaryfont;
+            }
+            input::-webkit-input-placeholder {
+                color: rgb(114, 114, 114);
+            }
+            input:-moz-placeholder {
+                color: rgb(114, 114, 114);
+            }
+            input::-moz-placeholder {
+                color: rgb(114, 114, 114);
+            }
+            input:-ms-input-placeholder {
+                color: rgb(114, 114, 114);
             }
           }
           .action {

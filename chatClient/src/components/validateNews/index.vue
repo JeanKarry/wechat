@@ -5,26 +5,14 @@
       <div class="filter">
         <el-tag type="info">选择过滤条件：</el-tag>
         <el-select v-model="filterType" placeholder="请选择">
-          <el-option
-            label="群"
-            :value="1" />
-          <el-option
-            label="好友"
-            :value="0" />
+          <el-option label="群" :value="1" />
+          <el-option label="好友" :value="0" />
         </el-select>
         <el-select v-model="filterStatus" placeholder="请选择">
-          <el-option
-            label="全部"
-            :value="-1" />
-          <el-option
-            label="未处理"
-            :value="0" />
-          <el-option
-            label="已同意"
-            :value="1" />
-          <el-option
-            label="已拒绝"
-            :value="2" />
+          <el-option label="全部" :value="-1" />
+          <el-option label="未处理" :value="0" />
+          <el-option label="已同意" :value="1" />
+          <el-option label="已拒绝" :value="2" />
         </el-select>
       </div>
       <div class="counter">
@@ -36,11 +24,12 @@
       <div class="validatenews-item" v-for="item in outcomteList" :key="item.time">
         <div class="apply-info">
           <span class="title">
-            <el-tooltip class="item" effect="dark" content="点击查看用户主页" placement="top">
-              <span class="nickname">
-                <router-link :to="`/user/${item.senderId}`" class="">
+            <el-tooltip class="item" effect="dark" content="点击查看用户个人资料" placement="top">
+              <!-- <router-link :to="`/user/${item.senderId}`" class="">
                   {{item.senderNickname.slice(0,10)}}
-                </router-link>
+                </router-link> -->
+              <span class="nickname">
+                {{item.senderNickname.slice(0,10)}}
               </span>
             </el-tooltip>
             <!-- {{item.validateType === 0 ? validateNewsTips.applyFriend}} -->
@@ -56,17 +45,15 @@
           </span>
         </div>
         <div class="go-operation">
-          <el-popover
-            placement="left"
-            width="300"
-            trigger="click">
+          <el-popover placement="left" width="300" trigger="click">
             <div class="validate-popover-body" v-loading="isAdding">
               <div class="sender-info">
                 <el-avatar :size="60" :src="IMG_URL + item.senderAvatar" @error="()=>true">
-                  <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+                  <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png" />
                 </el-avatar>
                 <div class="info">
-                  <span class="nickname">{{item.senderNickname}}</span>
+                  <span class="nickname">账号：{{item.senderNickname}}</span>
+                  <span class="nickname">昵称：{{ item.senderName}}</span>
                 </div>
               </div>
               <div class="addition">
@@ -77,17 +64,18 @@
               </div>
               <!-- <div class="operation"> -->
               <div class="operation" v-if="item.status === 0">
-                <el-button type="success" plain size="small" @click="agreeValidate(item)">同意</el-button>
+                <el-button style="background:rgb(26, 175, 255);color: aliceblue;" plain size="small"
+                  @click="agreeValidate(item)">同意</el-button>
                 <el-button type="danger" plain size="small">拒绝</el-button>
               </div>
               <div class="operation" v-else-if="item.status === 1">
-                <el-tag type="success">已同意</el-tag>
+                <el-tag style="background:rgb(26, 175, 255);color: aliceblue;">已同意</el-tag>
               </div>
               <div class="operation" v-else-if="item.status === 2">
                 <el-tag type="danger">已拒绝</el-tag>
               </div>
             </div>
-            <el-button slot="reference" type="success">查看</el-button>
+            <el-button slot="reference" style="background:rgb(26, 175, 255);color: aliceblue;">查看</el-button>
           </el-popover>
         </div>
       </div>
@@ -216,6 +204,7 @@ export default {
           line-height: 20px;
           .nickname {
             display: inline-block;
+            color: #3578E5;
           }
         }
       }

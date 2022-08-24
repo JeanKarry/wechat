@@ -3,14 +3,14 @@
     <span class="menu-item operation-text" v-if="type === 'recent'" @click.stop="remove">关闭会话</span>
     <span class="menu-item operation-text" @click.stop="viewProfile">查看资料</span>
     <span class="menu-item operation-text" @click.stop="modifyBeizhu">修改备注</span>
-    <span class="menu-item operation-text" @click.stop="switchFenzu">切换分组</span>
+    <!-- <span class="menu-item operation-text" @click.stop="switchFenzu">切换分组</span> -->
     <el-popover
       placement="top"
       width="160"
       v-model="showDelPop">
       <p>删除好友后聊天记录等信息也会被删除，是否删除？</p>
       <div style="text-align: right; margin: 0">
-        <el-button size="mini" type="text" @click="showDelPop = false">取消</el-button>
+        <el-button size="mini" type="text" @click="cancel">取消</el-button>
         <el-button type="primary" size="mini" @click.stop="deleteFriend">确定</el-button>
       </div>
       <span slot="reference" class="menu-item operation-text" @click.stop="()=>{}">删除好友</span>
@@ -41,6 +41,9 @@ export default {
         console.log(res)
       })
       // this.$eventBus.$emit('showUserProfile')
+    },
+    cancel(){
+      this.$emit('hiddenMenu')
     },
     switchFenzu() {
       this.$eventBus.$emit('toggleFenzuModal', {

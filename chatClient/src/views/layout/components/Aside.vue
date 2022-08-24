@@ -1,7 +1,7 @@
 <template>
   <div class="layout-cmp__aside">
     <div class="avatar">
-      <router-link to="/chat/setting">
+      <router-link to="/chat/setting" title="查看个人资料">
         <el-avatar shape="square" :size="50" :src="IMG_URL + userInfo.photo"></el-avatar>
       </router-link>
       <!-- <el-tooltip class="item" effect="dark" :content="userInfo.nickname" placement="top"> -->
@@ -9,17 +9,24 @@
       <!-- </el-tooltip> -->
     </div>
     <div class="nav-list">
-      <!-- <router-link to="/chat/add" tag="span" title="加好友">
-        <span class="nav-item iconfont icon-icon-"></span>
-      </router-link> -->
-      <el-badge :value="validateUnReadCount" :hidden="!validateUnReadCount">
-        <router-link to="/chat/system" class="aside-menu-link" title="系统消息">
-          <img src="../../../../static/image/消息 (1).png" width="25" height="25" />
+      <el-tooltip class="item" effect="dark" content="联系人列表" placement="left-start">
+        <router-link to="/chat/home" tag="span">
+          <img src="../../../../static/image/账号.png" width="25" height="25" />
         </router-link>
-      </el-badge>
-      <router-link to="/chat/mzone" tag="span" title="空间" >
-        <span class="nav-item iconfont icon-icon-test1" :class="active ? 'active' : ''" @click="handleHighLight"></span>
-      </router-link>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" content="空间动态" placement="left-start">
+        <router-link to="/chat/mzone" tag="span">
+          <img src="../../../../static/image/空间.png" width="25" height="25" @click="handleHighLight" />
+        </router-link>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" content="系统消息" placement="left-start">
+        <el-badge :value="validateUnReadCount" :hidden="!validateUnReadCount">
+          <router-link to="/chat/system" class="aside-menu-link" >
+            <img src="../../../../static/image/消息 (1).png" width="25" height="25" />
+          </router-link>
+        </el-badge>
+      </el-tooltip>
+
       <!-- <span class="nav-item iconfont icon-zhongchuangkongjian-"></span> -->
     </div>
     <!-- <div class="about-list">
@@ -92,15 +99,16 @@ export default {
   }
   .nav-list {
     margin-top: 50px;
+    display: flex;
+    height: 180px;
+    flex-direction: column;
+    justify-content: space-evenly;
     .nav-item {
       display: block;
       color: #fff;
-      margin-top: 20px;
+      margin-bottom: 20px;
       font-size: 22px;
       cursor: pointer;
-    }
-    .active {
-      color: red !important;
     }
   }
   .about-list {

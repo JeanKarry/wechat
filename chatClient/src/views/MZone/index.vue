@@ -149,7 +149,7 @@ export default {
       margin-bottom: 10px;
       .carousel {
         height: 190px;
-        background: #000;
+        background-color: var(--primary-bgcolor-7);
       }
       .info {
         display: flex;

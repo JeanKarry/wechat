@@ -163,7 +163,7 @@ export default {
 
 <style lang="scss">
 .add-page {
-  width: 815px;
+  width: 100%;
   height: 100%;
   padding: 10px 0;
   overflow-y: scroll;
@@ -187,8 +187,7 @@ export default {
       position: relative;
       background-color: #fff;
       border-radius: 3px;
-      min-height: 250px;
-      width: 600px;
+      min-height: 500px;
       padding: 10px;
       .description {
         margin-bottom: 10px;

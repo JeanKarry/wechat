@@ -1,12 +1,5 @@
 <template>
   <div class="chat-area__com">
-    <!-- 关闭聊天页面显示后  -->
-    <div class="showBg" v-show="open">
-      <div style="margin-top:20%">
-        <chat-svg width="400" height="300" />
-      </div>
-      <p>聊天~打开心灵的窗户</p>
-    </div>
     <chat-header :currentConversation="currentConversation" :set-current-conversation="setCurrentConversation" />
     <transition name="slide-up">
       <div class="history-msg-container" v-if="showHistoryMsg">
@@ -15,12 +8,14 @@
     </transition>
     <div :class="currentConversation.conversationType !== 'GROUP' ? 'main no-group' : 'main'">
       <div class="message-list-container">
+        <!-- 消息去洗 -->
         <message-list ref='messagelist' @load-message="loadmessage" :messagelist="messagesOutcome"
           :scrollbottom="scrollBottom" :hasmore="hasMore" :isloading="isLoading" :useanimation="useAnimation"
           :currentConversation="currentConversation" :last-enter-time="lastEnterTime"
           :set-last-enter-time="setLastEnterTime" />
       </div>
       <div class="group-desc" v-if="device !== 'Mobile' && currentConversation.conversationType === 'GROUP'">
+        <!-- 群聊消息区域 -->
         <group-desc :currentConversation="currentConversation" :key="datetamp" />
       </div>
     </div>
@@ -38,23 +33,23 @@
         <!-- <i class="item iconfont icon-huaban" />
         <i class="item iconfont icon-shipin" />
         <i class="item el-icon-phone-outline" /> -->
-        <span
-          :class="showHistoryMsg ? 'history-btn normal-font el-icon-caret-bottom' : 'history-btn normal-font el-icon-caret-top'"
+        <span :class="showHistoryMsg ? 'history-btn  el-icon-caret-bottom' : 'history-btn  el-icon-caret-top'"
           @click="setShowHistoryMsg">历史记录</span>
       </div>
       <div class="operation">
-        <el-button @click="close" type="danger" size="small">关闭</el-button>
-        <el-button @click="send" type="success" size="small">发送</el-button>
+        <el-button @click="close" type="danger" size="small">清空</el-button>
+        <el-button @click="send" style="background:rgb(26, 175, 255);color:#fff" size="small">发送</el-button>
       </div>
       <div style="display: none" contenteditable="true" class="textarea" @input="test">
 
       </div>
       <textarea ref="chatInp" class="textarea" v-model="messageText" maxlength="200" @input="scrollBottom = true"
         @keydown.enter="send($event)"></textarea>
-      <transition name="fade">
+      <!-- 上传图片操作的接口事件 -->
+      <!-- <transition name="fade">
         <up-img v-if="showUpImgCom" class="emoji-component" :token="token" @getStatus="getImgUploadResult"
           @getLocalUrl="getLocalUrl" :get-status="getImgUploadResult" :get-local-url="getLocalUrl" />
-      </transition>
+      </transition> -->
       <transition name="fade">
         <custom-emoji v-if="showEmojiCom" class="emoji-component" @addemoji="addEmoji" />
       </transition>
@@ -84,7 +79,6 @@ export default {
   },
   data() {
     return {
-      open:false,
       messageText: "",
       messages: [],
       showEmojiCom: false,
@@ -261,7 +255,7 @@ export default {
       this.messageText = ""
     },
     close(){
-      this.open = false
+      this.messageText=""
     },
     joinChatRoom() {
       this.$socket.emit("join", this.currentConversation)
@@ -480,7 +474,7 @@ export default {
       padding: 0 10px;
       border: 0;
       border-radius: 5px;
-      background-color: #e9ebee;
+      background-color: #ffffff;
       padding: 10px;
       resize: none;
       img {

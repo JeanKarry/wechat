@@ -1,42 +1,31 @@
 <template>
   <div class="conversationlist-com">
-    <div
-      class="search"
-      :style="device === 'Mobile' ? {marginLeft: '50px'} : {}"
-    >
+    <div class="search" :style="device === 'Mobile' ? {marginLeft: '50px'} : {}">
       <top-search />
     </div>
     <!-- <div class="todo">
       <todo />
     </div> -->
     <el-tabs type="border-card" :stretch="true">
-      <el-tab-pane>
+      <el-tab-pane label="最近会话">
         <span slot="label"><i class="el-icon-chat-line-round"></i></span>
-        <recent-conversation-list
-          :current-conversation="currentConversation"
-          :set-current-conversation="setCurrentConversation"
-          @setCurrentConversation="setCurrentConversation"
-        />
+        <recent-conversation-list :current-conversation="currentConversation"
+          :set-current-conversation="setCurrentConversation" @setCurrentConversation="setCurrentConversation" />
       </el-tab-pane>
       <el-tab-pane label="好友">
         <span slot="label"><i class="el-icon-user"></i></span>
         <div class="friend-tab-header space-bw">
           <el-input size="mini" v-model="newFenzuName" placeholder="请输入分组名" style="marginRight: 5px" />
-          <el-button size="mini" type="success" @click="addNewFenzu" :loading="isAdding">添加</el-button>
+          <el-button size="mini" style="background:hsla(201, 100%, 55%, 1);color: #fff;" @click="addNewFenzu"
+            :loading="isAdding">添加</el-button>
         </div>
-        <fenzu-conversation-list
-          :current-conversation="currentConversation"
-          :set-current-conversation="setCurrentConversation"
-          @setCurrentConversation="setCurrentConversation"
-        />
+        <fenzu-conversation-list :current-conversation="currentConversation"
+          :set-current-conversation="setCurrentConversation" @setCurrentConversation="setCurrentConversation" />
       </el-tab-pane>
       <el-tab-pane label="群">
         <span slot="label"><i style="fontSize: 16px" class="icon-qunzu iconfont"></i></span>
-        <group-conversation-list
-          :current-conversation="currentConversation"
-          :set-current-conversation="setCurrentConversation"
-          @setCurrentConversation="setCurrentConversation"
-        />
+        <group-conversation-list :current-conversation="currentConversation"
+          :set-current-conversation="setCurrentConversation" @setCurrentConversation="setCurrentConversation" />
       </el-tab-pane>
     </el-tabs>
   </div>

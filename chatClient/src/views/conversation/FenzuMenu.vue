@@ -1,6 +1,6 @@
 <template>
   <div class="fenzu-menu box-shadow1" :style="{'top': top + 'px', 'left': left + 'px'}">
-    <span class="menu-item operation-text" @click.stop="addFenzu">添加分组</span>
+    <!-- <span class="menu-item operation-text" @click.stop="addFenzu">添加分组</span> -->
     <span class="menu-item operation-text" @click.stop="editFenzu">编辑分组</span>
     <el-popover
       placement="top"
@@ -11,7 +11,7 @@
     >
       <p style="margin: 0 0 5px 0">删除后分组下的好友会自动添加到【我的好友】，确认删除？</p>
       <div style="text-align: right; margin: 0">
-        <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+        <el-button size="mini" type="text" @click="cancel">取消</el-button>
         <el-button type="primary" size="mini" @click="deleteFenzu">确定</el-button>
       </div>
       <span
@@ -40,9 +40,14 @@ export default {
       this.$emit('close')
       this.visible = false
     },
+    cancel(){
+      this.$emit('close')
+      this.visible = false
+    },
     editFenzu() {
       this.$emit('editFenzu')
       this.$emit('close')
+      this.visible = false
     }
   },
 }

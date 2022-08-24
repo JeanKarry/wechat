@@ -27,15 +27,16 @@
           </router-link>
         </span>
         <span
-          class="item time"
+          class="time"
           :style="messageitem.senderId === userInfo._id ? {'float': 'right'} : {}"
+          style="color:#000"
         >{{messageitem.time | formatDateToZH}}</span>
       </span>
       <div
         :class="contentClassName"
       >
         <span
-          class="primary-font message-wrapper"
+          class="message-wrapper"
           :style="messageWraperStyle"
          >
           <span

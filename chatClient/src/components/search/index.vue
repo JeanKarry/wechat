@@ -2,16 +2,19 @@
   <div class="search-cmp">
     <!-- input输入区域 -->
     <div class="header" :style="{'height': height + 'px'}">
-      <input :placeholder="placeholder" type="text" class="normal-inp" @keydown.enter="search" v-model="keyword"
+      <input placeholder="搜索点这里..." type="text" class="normal-inp" @keydown.enter="search" v-model="keyword"
         @focus="setShowContent(true)">
-      <router-link to="/chat/add" tag="span" title="加好友">
-        <span class="nav-item iconfont icon-icon-"></span>
-      </router-link>
+      <el-tooltip class="item" effect="dark" content="加好友" placement="top-start">
+        <router-link to="/chat/add" tag="span" class="bg" >
+          <span class="nav-item iconfont icon-icon-"></span>
+        </router-link>
+      </el-tooltip>
     </div>
     <!-- 搜索结果区域 -->
     <transition name="slide-down">
       <div class="content" :style="{top: height + 'px'}" v-if="showContent">
-        <slot />
+        <!-- <slot /> -->
+
       </div>
     </transition>
   </div>
@@ -21,10 +24,6 @@
 import { findParentNode } from '@/utils'
 export default {
   props: {
-    placeholder: {
-      type: String,
-      default: '请输入要查询的内容'
-    },
     height: {
       type: Number,
       default: 40
@@ -66,30 +65,56 @@ export default {
 </script>
 
 <style lang="scss">
-@import './../../../static/css/animation.scss';
+// @import './../../../static/css/animation.scss';
 .search-cmp {
   position: relative;
+  color: #000 !important;
   .header{
     width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
+    input::-webkit-input-placeholder {
+        color: rgb(114, 114, 114);
+      }
+    input:-moz-placeholder{
+        color: rgb(114, 114, 114);
+    }
+    input::-moz-placeholder {
+        color: rgb(114, 114, 114);
+      }
+    input:-ms-input-placeholder {
+        color: rgb(114, 114, 114);
+    }
     .normal-inp{
-      width: 86%;
+      width: 82%;
+     
     }
-    .nav-item{
+    .bg {
+      position: relative;
       flex: 1;
-      font-size: 20px;
-      cursor: pointer;
+      height: 98%;
+      border-radius: 3px;
+      margin-left: 10px;
+      background: rgb(26, 175, 255);
+      .nav-item {
+          position: absolute;
+          z-index: 111;
+          font-size: 20px;
+          top: 20%;
+          left: 20%;
+          color: #fff;
+          cursor: pointer;
+        }
     }
+   
   }
   .content {
     position: absolute;
     z-index: 1010;
     background-color: #fff;
-    width: 86%;
-    margin-left: 5px;
+    width: 82%;
     padding: 10px;
     box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
     transition: all .5s;

@@ -14,6 +14,7 @@
       </el-tab-pane>
       <el-tab-pane label="好友">
         <span slot="label"><i class="el-icon-user"></i></span>
+        <!-- 好友列表 -->
         <div class="friend-tab-header space-bw">
           <el-input size="mini" v-model="newFenzuName" placeholder="请输入分组名" style="marginRight: 5px" />
           <el-button size="mini" style="background:hsla(201, 100%, 55%, 1);color: #fff;" @click="addNewFenzu"

@@ -102,8 +102,9 @@ export default {
           position: absolute;
           z-index: 111;
           font-size: 20px;
-          top: 20%;
-          left: 20%;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%,-50%);
           color: #fff;
           cursor: pointer;
         }

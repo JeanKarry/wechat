@@ -1,7 +1,7 @@
 <template>
   <div class="setting-page" :style="device === 'Mobile' ? {width: '95%'} : {}">
     <router-link to="/">
-      <span class="out">❌</span>
+      <span class="out" @click="handleReturn">❌</span>
     </router-link>
     <div class="header">
       <div class="avatar">
@@ -28,18 +28,24 @@
           <li class="setting-item" v-for="item in settingList" :key="item">
             <span class="title">{{listZHMap[item]}}</span>
             <div class="inp-box">
+              <!-- 如果是选择男女的话 -->
               <template v-if="item === 'sex'">
-                <el-radio-group v-model="userSetting[item]" :disabled="!isModifying[item]" size="mini">
+                <!-- <el-radio-group v-model="userSetting[item]" :disabled="!isModifying[item]" size="mini">
+                  <el-radio-button label="0">男</el-radio-button>
+                  <el-radio-button label="1">女</el-radio-button>
+                  <el-radio-button label="3">保密</el-radio-button>
+                </el-radio-group> -->
+                <el-radio-group v-model="userSetting[item]" size="mini">
                   <el-radio-button label="0">男</el-radio-button>
                   <el-radio-button label="1">女</el-radio-button>
                   <el-radio-button label="3">保密</el-radio-button>
                 </el-radio-group>
               </template>
               <template v-else>
-                <input type="text" style="color:#000" :ref="item" :disabled="!isModifying[item]" v-model="userSetting[item]">
+                <input type="text" style="color:#000" :ref="item" v-model="userSetting[item]">
               </template>
             </div>
-            <div class="action">
+            <!-- <div class="action">
               <span v-show="!isModifying[item]" class="operation-text" @click="setModily(item, true)">
                 修改
               </span>
@@ -47,19 +53,23 @@
                 <el-button type="primary" size="small" @click="saveModify(item)">保存</el-button>
                 <el-button type="error" size="small" @click="setModily(item, false)">取消</el-button>
               </div>
-            </div>
+            </div> -->
           </li>
+          <div class="action">
+            <div class="oper">
+              <el-button type="primary" size="small" @click="saveModify()">确认</el-button>
+            </div>
+          </div>
         </ul>
         <ul v-show="currentTab === 'password'" class="user-password">
           <li class="pwd-item" v-for="(value, key) in pwdMap" :key="key">
             <span class="title">{{value}}</span>
             <div class="inp-box">
-              <input :placeholder="pwdPlaceholder[key]" type="text" autocomplete=false
-                onfocus="this.type = 'password'" v-model="pwdSetting[key]" style="color:#000;"/>
+              <input :placeholder="pwdPlaceholder[key]" autocomplete=false v-model="pwdSetting[key]" />
             </div>
           </li>
           <div class="action">
-            <el-button type="primary" @click="updateUserPwd">确认</el-button>
+            <el-button type="primary" size="small" @click="updateUserPwd">确认</el-button>
           </div>
         </ul>
       </div>
@@ -120,6 +130,9 @@ export default {
     }
   },
   methods: {
+    handleReturn () {
+      this.$eventBus.$emit('high', false)
+    },
     setCurrentTab(tab) {
       this.currentTab = tab
     },
@@ -147,21 +160,48 @@ export default {
         this.setUserSetting(userInfo)
       }
     },
-    /**更新用户信息 */
-    async saveModify(key) {
-      if (this.userSetting[key] === this.userInfo[key]) {
-        this.setModily(undefined, false)
-        return
-      }
+    // /**更新用户信息 */
+    // async saveModify(key) {
+    //   if (this.userSetting[key] === this.userInfo[key]) {
+    //     this.setModily(undefined, false)
+    //     return
+    //   }
+    //   const params = {
+    //     field: key,
+    //     value: this.userSetting[key],
+    //     userId: this.userInfo._id
+    //   }
+    //   this.fetching = true
+    //   const {data} = await this.$http.updateUserInfo(params)
+    //   if (data.status === 2000) {
+    //     const userInfo = await this.$http.getUserInfo(this.userInfo._id)
+    //     this.$store.dispatch('user/LOGIN', userInfo.data.data)
+    //     this.fetching = false
+    //     this.$message({type: 'success', message: '修改成功！'})
+    //   } else {
+    //     this.fetching = false
+    //     this.setUserSetting(this.userInfo)
+    //     this.$message({type: 'error', message: '修改失败！'})
+    //   }
+    //   this.setModily(undefined, false)
+    // },
+    // 修改用户信息，传递一个数组对象，修改成功后，再获取用户详情，并保存到store状态中
+     async saveModify() {
       const params = {
-        field: key,
-        value: this.userSetting[key],
+        // field: key,
+        // value: this.userSetting[key],
+        nickname:this.userSetting.nickname,
+        age: this.userSetting.age,
+        sex:this.userSetting.sex,
+        email: this.userSetting.email,
+        signature: this.userSetting.signature,
         userId: this.userInfo._id
       }
       this.fetching = true
       const {data} = await this.$http.updateUserInfo(params)
       if (data.status === 2000) {
         const userInfo = await this.$http.getUserInfo(this.userInfo._id)
+        console.log(userInfo)
         this.$store.dispatch('user/LOGIN', userInfo.data.data)
         this.fetching = false
         this.$message({type: 'success', message: '修改成功！'})
@@ -172,11 +212,13 @@ export default {
       }
       this.setModily(undefined, false)
     },
+    // 更新用户密码
     async updateUserPwd() {
       const params = Object.assign({}, this.pwdSetting, {userId: this.userInfo._id})
       const { data } = await this.$http.updateUserPwd(params)
       if (data.status === 2000) {
         this.$message({type: 'success', message: data.msg})
+        this.pwdSetting={}
       } else {
         this.$message({type: 'warning', message: data.msg})
       }
@@ -252,6 +294,12 @@ export default {
     }
     .content {
       .user-setting-list {
+        .action {
+            width: auto;
+            height: 50px;
+            margin-left: 5px;
+            text-align: right;
+          }
         .setting-item {
           display: flex;
           align-items: center;
@@ -285,11 +333,6 @@ export default {
                 color: rgb(114, 114, 114);
             }
           }
-          .action {
-            width: auto;
-            margin-left: 5px;
-            text-align: right;
-          }
         }
       }
       .user-password {
@@ -312,7 +355,18 @@ export default {
               border: none;
               outline: none;
               background-color: transparent;
-              color: $secondaryfont;
+            }
+             input::-webkit-input-placeholder {
+                color: rgb(114, 114, 114);
+            }
+            input:-moz-placeholder {
+                color: rgb(114, 114, 114);
+            }
+            input::-moz-placeholder {
+                color: rgb(114, 114, 114);
+            }
+            input:-ms-input-placeholder {
+                color: rgb(114, 114, 114);
             }
           }
         }

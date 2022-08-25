@@ -18,6 +18,7 @@
             @keydown.enter.native="confirmEdit"
           />
         </template>
+        <!-- 遍历联系人列表 -->
         <conversation-item
           v-for="item in outcomeConversation[item]"
           :key="item.id"
@@ -157,11 +158,20 @@ export default {
     handlerCollapseItemClick(e, item) {
       e.preventDefault()
       const { button } = e
+      console.log('----------------', e, item.dataset.title)
+      // 右键点击事件
       if(button !== 2) return
-      this.showMenu = true
-      this.menuLeft = e.pageX
-      this.menuTop = e.pageY
-      this.currClickFenzu = item.dataset.title
+      if (item.dataset.title == '我的好友'){
+        this.$message({
+          message: '该分组是默认分组，无法操作',
+          type: 'warning'
+        })
+      }else{
+        this.showMenu = true
+        this.menuLeft = e.pageX
+        this.menuTop = e.pageY
+        this.currClickFenzu = item.dataset.title
+      }
     },
     closeFenzuMenu() {
       this.showMenu = false

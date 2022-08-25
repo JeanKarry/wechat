@@ -1,13 +1,6 @@
 <template>
   <div class="group-desc-com">
-    <div class="notice">
-      <span>
-        富强、民主、文明、和谐、自由、平等、公正、法治，倡导爱国、敬业、诚信、友善
-      </span>
-    </div>
-    <div class="member">
       <group-user-list :userlist="groupMembers" />
-    </div>
   </div>
 </template>
 
@@ -47,12 +40,5 @@ export default {
   height: 100%;
   width: 100%;
   border-left: 1px solid #cccccc;
-  .notice {
-    height: 50%;
-    border-bottom: 1px solid #cccccc;
-  }
-  .member {
-    height: 50%;
-  }
 }
 </style>

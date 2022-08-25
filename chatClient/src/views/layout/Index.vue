@@ -7,24 +7,17 @@
       <main v-show="showMain" class="co-messager-layout">
         <!-- <my-header></my-header> -->
         <!-- filter-bgc是用于设置背景虚化的，因为使用了filter以及transform后fixed会改变 -->
-        <div
-          v-if="!device === 'Mobile'"
-          class="filter-bgc"
-          v-css="{
+        <div v-if="!device === 'Mobile'" class="filter-bgc" v-css="{
             'filter': 'blur(' + blur + 'px)',
             'background-image': 'url(' + bgImgUrl + ')'
-          }"
-        />
+          }" />
         <el-main
-          :class="device === 'Mobile' ? 'co-messager-main mobile' : 'co-messager-main'"
-          v-css=" opacity !== 1 ? {'opacity': opacity} : {}"
-        >
+          :class="isZoom ? (device === 'Mobile' ? 'co-messager-main mobile' : 'co-messager-main zoom') : (device === 'Mobile' ? 'co-messager-main mobile' : 'co-messager-main') "
+          v-css=" opacity !== 1 ? {'opacity': opacity} : {}">
           <audio :src="NotifyAudio" ref="audio" muted></audio>
           <transition name="slide-left">
-            <div
-              :class="device === 'Mobile' ? 'co-messager-aside mobile' : 'co-messager-aside'"
-              v-css="device === 'Mobile' ? {'transform': 'translateX(' + asideTranslateX + 'px)'} : ''"
-            >
+            <div :class="device === 'Mobile' ? 'co-messager-aside mobile' : 'co-messager-aside'"
+              v-css="device === 'Mobile' ? {'transform': 'translateX(' + asideTranslateX + 'px)'} : ''">
               <my-aside :set-show-theme="setShowTheme" />
             </div>
           </transition>
@@ -43,9 +36,7 @@
     <!-- 在移动端下点击展示左边菜单 -->
     <div
       v-show="device === 'Mobile' && asideTranslateX === -70 && $route.path === '/index' && currentUI === 'conversation'"
-      class="mobile-menu"
-      @click.stop="toggleAside"
-    >
+      class="mobile-menu" @click.stop="toggleAside">
       <img :src="IMG_URL + userInfo.photo" alt="" srcset="">
     </div>
   </div>
@@ -78,6 +69,7 @@ export default {
   name: 'Layout',
   data() {
     return {
+      isZoom:false,
       include: ['Home'], // keepAlive缓存相关
       bgImgUrl: '',
       NotifyAudio: '',
@@ -254,6 +246,10 @@ export default {
         this.asideTranslateX = -70
       })
     }
+    this.$eventBus.$on('zoom',res => {
+      this.isZoom = res
+    })
+   
     this.sysUserJoinSocket()
     console.log(
       `%c Messger V${APP_VERSION} Started %c Contact: ccdebuging@gmail.com %c`,
@@ -310,11 +306,22 @@ export default {
       margin: -336px 0 0 -510px;
       width: 1020px;
       height: 672px;
-      background-color: #e9ebee;
-      color: #333;
+      background: #fff;
       border-radius: 5px;
       padding: 0;
       opacity: 1;
+      }
+      .zoom{
+          display: flex;
+          position: absolute;
+          left: 0;
+          top:0;
+          margin: 0;
+          width: 100%;
+          height: 100%;
+          padding: 0;
+          opacity: 1;
+          }   
       /*针对移动端做特殊处理*/
       &.mobile {
         left: 0;
@@ -340,7 +347,6 @@ export default {
           width: 100%;
         }
       }
-    }
   }
   .mobile-menu {
     position: fixed;

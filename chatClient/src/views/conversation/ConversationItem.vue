@@ -1,31 +1,27 @@
 <template>
+  <!-- 联系人列表或者群聊列表的其中一个具体的联系人或群 -->
   <div
     :class="currentConversation._id && currentConversation._id === conversationInfo._id ? 'conversationitem__cmp active' : 'conversationitem__cmp'"
-    v-if="conversationInfo._id"
-  >
+    v-if="conversationInfo._id">
+    <!-- 群聊 -->
     <template v-if="conversationInfo.isGroup">
       <div class="conversation-info">
         <div class="wrapper">
-          <el-badge
-            :value="unreadNews[conversationInfo.roomid]"
-            :hidden="unreadNews[conversationInfo.roomid] === 0"
-            class="item el-badge"
-          >
-            <el-avatar
-              size="large"
-              :src="IMG_URL + conversationInfo.groupId.img"
-              @error="() => true"
-            >
-              <img
-                src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
-              >
+          <el-badge :value="unreadNews[conversationInfo.roomid]" :hidden="unreadNews[conversationInfo.roomid] === 0"
+            class="item el-badge">
+            <el-avatar size="large" :src="IMG_URL + conversationInfo.groupId.img" @error="() => true">
+              <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png">
             </el-avatar>
           </el-badge>
-          
+
           <div class="conversation-detail">
+            <!-- 群聊单个侧边栏展示 -->
+            <!-- 名称 -->
             <span class="top-item primary-font detail-item ellipsis space-bw" style="display: flex;">
               <span class="ellipsis">{{conversationInfo.groupId.title}}</span>
+              <span style="float:right">群组</span>
             </span>
+            <!-- 聊天内容 -->
             <span class="bottom-item secondary-font detail-item ellipsis space-bw" style="display: flex">
               <span v-if="type === 'fenzu'">
                 {{conversationInfo.groupId.desc}}
@@ -33,50 +29,44 @@
               <span v-if="type === 'recent'" style="text-overflow: ellipsis; overflow: hidden;">
                 {{lastNews}}
               </span>
-              <span v-if="type === 'recent' && lastNews" style="margin-left: 5px">{{this.conversationInfo.lastNews.time | formatDateToZH}}</span>
+              <span v-if="type === 'recent' && lastNews" style="margin-left: 5px">{{this.conversationInfo.lastNews.time
+                | formatDateToZH}}</span>
             </span>
           </div>
         </div>
       </div>
     </template>
+    <!-- 联系人 -->
     <template v-else>
       <div class="conversation-info" @contextmenu.prevent.stop="showMenu">
         <div class="wrapper">
-          <el-badge
-            :value="unreadNews[conversationInfo.roomid]"
-            :hidden="unreadNews[conversationInfo.roomid] === 0"
-            class="item el-badge"
-          >
-            <el-avatar
-              size="large"
-              :src="IMG_URL + conversationInfo.photo"
-              @error="() => true"
-              :class="!onlineUserIds.includes(conversationInfo._id) ? 'offline' : 'online'"
-            >
+          <el-badge :value="unreadNews[conversationInfo.roomid]" :hidden="unreadNews[conversationInfo.roomid] === 0"
+            class="item el-badge">
+            <el-avatar size="large" :src="IMG_URL + conversationInfo.photo" @error="() => true"
+              :class="!onlineUserIds.includes(conversationInfo._id) ? 'offline' : 'online'">
               <img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
             </el-avatar>
           </el-badge>
-          
+
           <div class="conversation-detail">
             <span class="top-item primary-font detail-item ellipsis space-bw" style="display: flex">
-              <span class="ellipsis">{{conversationInfo.beizhu ? conversationInfo.beizhu : conversationInfo.nickname}}</span>
-              <i :class="'level '+ 'lv' + conversationInfo.level"></i>
+              <span class="ellipsis">{{conversationInfo.beizhu ? conversationInfo.beizhu :
+                conversationInfo.nickname}}
+                <i :class="'level '+ 'lv' + conversationInfo.level" ></i>
+              </span>
+              <span style="float:right">好友</span>
             </span>
             <span class="bottom-item secondary-font detail-item ellipsis space-bw" style="display: flex">
               <span v-if="type === 'fenzu'">{{conversationInfo.signature}}</span>
               <span v-if="type === 'recent'" style="text-overflow: ellipsis; overflow: hidden;">{{lastNews}}</span>
-              <span v-if="type === 'recent' && lastNews" style="margin-left: 5px">{{this.conversationInfo.lastNews.time | formatDateToZH}}</span>
+              <span v-if="type === 'recent' && lastNews" style="margin-left: 5px">{{this.conversationInfo.lastNews.time
+                | formatDateToZH}}</span>
             </span>
           </div>
         </div>
       </div>
       <div class="menu" v-if="isShowMenu" :style="{'left': menuLeft + 'px', 'top': menuTop + 'px'}">
-        <conversation-menu
-          :conversation="conversationInfo"
-          :type="type"
-          @remove="remove"
-          @hiddenMenu="hiddenMenu"
-        />
+        <conversation-menu :conversation="conversationInfo" :type="type" @remove="remove" @hiddenMenu="hiddenMenu" />
       </div>
     </template>
   </div>
@@ -243,6 +233,18 @@ export default {
       .conversation-detail {
         width: calc(100% - 50px);
         margin-left: 10px;
+        &:hover .primary-font{
+          color: #fff;
+        }
+        &:hover .secondary-font{
+          color: #fff;
+        }
+        &:active .secondary-font{
+          color: #fff;
+        }
+        &:active .primary-font{
+          color: #fff;
+        }
         .detail-item {
           display: block;
         }

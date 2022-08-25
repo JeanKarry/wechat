@@ -4,7 +4,7 @@
       <div v-if="device === 'Mobile'" class="goback el-icon-arrow-left" @click="$router.go(-1)" />
       <div class="mzone-top">
         <router-link to="/">
-          <span class="out"><img src="../../../static/image/返回.png" width="30" height="30" /></span>
+          <span class="out"><img src="../../../static/image/返回.png" width="30" height="30" @click="handleReturn"/></span>
         </router-link>
         <div class="carousel">
         </div>
@@ -70,6 +70,9 @@ export default {
     }
   },
   methods: {
+    handleReturn(){
+      this.$eventBus.$emit('high',false)
+    },
     tabSelect(index) {
       // console.log(a)
       this.activeTab = index

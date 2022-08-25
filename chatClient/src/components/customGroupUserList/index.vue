@@ -76,7 +76,8 @@ export default {
   }
   .user-list {
     flex: 1;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
     .user-item {
       padding: 5px 0;
       display: flex;

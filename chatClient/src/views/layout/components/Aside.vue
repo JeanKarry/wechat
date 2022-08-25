@@ -4,25 +4,43 @@
       <router-link to="/chat/setting" title="查看个人资料">
         <el-avatar shape="square" :size="50" :src="IMG_URL + userInfo.photo"></el-avatar>
       </router-link>
+      <span class="nickname">{{userInfo.name}}</span>
       <!-- <el-tooltip class="item" effect="dark" :content="userInfo.nickname" placement="top"> -->
       <!-- <span class="nickname">{{userInfo.nickname}}</span> -->
       <!-- </el-tooltip> -->
     </div>
     <div class="nav-list">
-      <el-tooltip class="item" effect="dark" content="联系人列表" placement="left-start">
+      <el-tooltip class="item" effect="dark" content="联系人列表" placement="left-start" v-show="!isUser">
         <router-link to="/chat/home" tag="span">
-          <img src="../../../../static/image/账号.png" width="25" height="25" />
+          <img src="../../../../static/image/账号.png" width="25" height="25" @click="handleHighUser" />
         </router-link>
       </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="空间动态" placement="left-start">
+      <el-tooltip class="item" effect="dark" content="联系人列表" placement="left-start" v-show="isUser">
+        <router-link to="/chat/home" tag="span">
+          <img src="../../../../static/image/账号 (1).png" width="25" height="25" @click="handleHighUser" />
+        </router-link>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" content="空间动态" placement="left-start" v-show="!isSpace">
         <router-link to="/chat/mzone" tag="span">
-          <img src="../../../../static/image/空间.png" width="25" height="25" @click="handleHighLight" />
+          <img src="../../../../static/image/空间.png" width="25" height="25" @click="handleHighLightSpace" />
         </router-link>
       </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="系统消息" placement="left-start">
+      <el-tooltip class="item" effect="dark" content="空间动态" placement="left-start" v-show="isSpace">
+        <router-link to="/chat/mzone" tag="span">
+          <img src="../../../../static/image/空间 (1).png" width="25" height="25" @click="handleHighLightSpace" />
+        </router-link>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" content="系统消息" placement="left-start" v-show="isNotify">
         <el-badge :value="validateUnReadCount" :hidden="!validateUnReadCount">
-          <router-link to="/chat/system" class="aside-menu-link" >
-            <img src="../../../../static/image/消息 (1).png" width="25" height="25" />
+          <router-link to="/chat/system" class="aside-menu-link">
+            <img src="../../../../static/image/消息 (2).png" width="25" height="25" @click="handleNotify" />
+          </router-link>
+        </el-badge>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" content="系统消息" placement="left-start" v-show="!isNotify">
+        <el-badge :value="validateUnReadCount" :hidden="!validateUnReadCount">
+          <router-link to="/chat/system" class="aside-menu-link">
+            <img src="../../../../static/image/消息 (1).png" width="25" height="25" @click="handleNotify" />
           </router-link>
         </el-badge>
       </el-tooltip>
@@ -51,7 +69,9 @@ export default {
   },
   data() {
     return {
-      active:false,
+      isUser:true,
+      isSpace:false,
+      isNotify:false,
       IMG_URL: process.env.IMG_URL
     }
   },
@@ -61,9 +81,28 @@ export default {
     }
   },
   methods:{
-    handleHighLight(){
-      this.active = true
+    handleHighLightSpace(){
+      this.isSpace = true
+      this.isUser = false
+      this.isNotify = false
+    },
+    handleHighUser(){
+      this.isSpace = false
+      this.isUser = true
+      this.isNotify = false
+    },
+    handleNotify(){
+      this.isSpace = false
+      this.isUser = false
+      this.isNotify = true
     }
+  },
+  created(){
+    this.$eventBus.$on('high',res => {
+      this.isUser = true
+      this.isSpace = res
+      this.isNotify =res
+    })
   },
   components: {
     operMenu
@@ -83,9 +122,11 @@ export default {
   padding: 10px 0;
   background-color: var(--primary-bgcolor-7);
   .avatar {
+    width: 100%;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+    text-align: center;
     .nickname {
       color:#fff;
       display: inline-block;

@@ -23,15 +23,22 @@
             </el-tooltip>
           </span>
           <!-- <i class="operation-item el-icon-menu" title="放大" @click.stop="toggleShowSettingPanel"></i> -->
-          <i class="operation-item el-icon-menu" title="放大" @click.stop="zoom"></i>
+          <el-tooltip class="item" effect="dark" content="放大页面" placement="top" v-show="isZoom">
+            <img src="../../../../static/image/放大 (1).png" @click.stop="zoom" width="20" height="20"
+              style="margin-left:10px" />
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="缩小页面" placement="top" v-show="!isZoom">
+            <img src="../../../../static/image/缩小.png" @click.stop="shrink" width="20" height="20"
+              style="margin-left:10px" />
+          </el-tooltip>
         </div>
       </div>
     </transition>
-    <!-- <transition name="roll">
+    <transition name="roll">
       <div class="setting-panel" v-if="showSettingPanel">
-        <setting-panel :current-conversation="currentConversation" @setCurrentConversation="setCurrentConversation" />  
-      </div>      
-    </transition> -->
+        <setting-panel :current-conversation="currentConversation" @setCurrentConversation="setCurrentConversation" />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -40,6 +47,7 @@ import './../../../../static/iconfont/iconfont.css'
 import settingPanel from './settingPanel'
 import { WEB_RTC_MSG_TYPE } from '@/const'
 import { mapState } from 'vuex'
+import Img from '../../../components/messageTypes/img.vue'
 export default {
   props: {
     currentConversation: Object,
@@ -47,7 +55,8 @@ export default {
   },
   data() {
     return {
-      showSettingPanel: false
+      showSettingPanel: false,
+      isZoom:true
     }
   },
   computed: {
@@ -92,8 +101,14 @@ export default {
       this.$store.dispatch('app/SET_IS_AUDIOING', true)
       this.$eventBus.$emit('web_rtc_msg', { type: WEB_RTC_MSG_TYPE.audio})
     },
+    // 触发首页扩大功能
     zoom(){
-
+      this.$eventBus.$emit('zoom',this.isZoom)
+      this.isZoom = ! this.isZoom
+    },
+    shrink(){
+      this.$eventBus.$emit('zoom', this.isZoom)
+      this.isZoom = !this.isZoom
     },
     // toggleShowSettingPanel() {
     //   this.showSettingPanel = !this.showSettingPanel

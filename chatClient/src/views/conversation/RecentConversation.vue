@@ -1,16 +1,10 @@
 <template>
   <div class="recent-conversation-list" v-loading="isLoading">
     <transition-group name="slide-up" appear>
-      <conversation-item
-        v-for="item in outcomeConversationList"
-        :key="item._id"
-        :conversationInfo="item"
-        :currentConversation="currentConversation"
-        :recent-conversation="conversationList"
-        @setCurrentConversation="setCurrentConversation"
-        @click.native="changeCurrentConversation(item)"
-        type="recent"
-      />
+      <conversation-item v-for="item in outcomeConversationList" :key="item._id" :conversationInfo="item"
+        :currentConversation="currentConversation" :recent-conversation="conversationList"
+        @setCurrentConversation="setCurrentConversation" @click.native="changeCurrentConversation(item)"
+        type="recent" />
     </transition-group>
     <div class="empty hor-ver-center" v-if="!outcomeConversationList.length">
       <empty-svg width="200" height="200" />

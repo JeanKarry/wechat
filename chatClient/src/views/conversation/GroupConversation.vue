@@ -7,6 +7,7 @@
         :title="`${item.text}（${groupCategoryMap[item.category].length}）`"
         :name="item.category"
       >
+      <!-- 群聊列表 -->
         <conversation-item
           v-for="item in groupCategoryMap[item.category]"
           :key="item.id"

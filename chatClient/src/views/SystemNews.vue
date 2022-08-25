@@ -1,7 +1,7 @@
 <template>
   <div class="system-page" :style="device === 'Mobile' ? {width: '100%'} : {}">
     <router-link to="/">
-      <span class="out">❌</span>
+      <span class="out" @click="handleReturn">❌</span>
     </router-link>
     <p class="title">我的系统消息</p>
     <validate-news :validateNewsList="validateNewsList" @changeValidateNewsStatus="changeValidateNewsStatus" />
@@ -27,6 +27,9 @@ export default {
     }
   },
   methods: {
+    handleReturn () {
+      this.$eventBus.$emit('high', false)
+    },
     async fetchMyValidateNews() {
       const { _id: id } = this.userInfo
       const { data } = await this.$http.getMyValidateNews({id})

@@ -1,19 +1,18 @@
 <template>
+  <!-- 最近联系人 右键菜单栏   -->
   <div class="conversation-item-menu box-shadow1">
     <span class="menu-item operation-text" v-if="type === 'recent'" @click.stop="remove">关闭会话</span>
-    <span class="menu-item operation-text" @click.stop="viewProfile">查看资料</span>
-    <span class="menu-item operation-text" @click.stop="modifyBeizhu">修改备注</span>
-    <!-- <span class="menu-item operation-text" @click.stop="switchFenzu">切换分组</span> -->
-    <el-popover
-      placement="top"
-      width="160"
-      v-model="showDelPop">
+    <span class="menu-item operation-text" @click.stop="viewProfile" >查看资料</span>
+    <span class="menu-item operation-text" @click.stop="modifyBeizhu" >修改备注</span>
+    <span class="menu-item operation-text" @click.stop="switchFenzu" v-if="type === 'fenzu'">切换分组</span>
+    <el-popover placement="top" width="160" v-model="showDelPop">
       <p>删除好友后聊天记录等信息也会被删除，是否删除？</p>
       <div style="text-align: right; margin: 0">
         <el-button size="mini" type="text" @click="cancel">取消</el-button>
         <el-button type="primary" size="mini" @click.stop="deleteFriend">确定</el-button>
       </div>
-      <span slot="reference" class="menu-item operation-text" @click.stop="()=>{}">删除好友</span>
+      <span slot="reference" class="menu-item operation-text delete" @click.stop="()=>{}"
+        v-if="type === 'fenzu'">删除好友</span>
     </el-popover>
   </div>
 </template>
@@ -87,14 +86,32 @@ export default {
 
 <style lang="scss">
 .conversation-item-menu {
-  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 5px;
   .menu-item {
     display: block;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    color: #000;
     margin-top: 10px;
   }
   >.menu-item {
     &:first-child {
       margin-top: 0;
+    }
+    &:hover{
+      background: #000;
+      color: #fff;
+      transition: none !important;
+    }
+  }
+  .delete{
+    &:hover{
+        background: #000;
+        color: #fff;
+        transition: none !important;
     }
   }
 }

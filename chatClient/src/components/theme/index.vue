@@ -56,7 +56,7 @@
           <color-pick :color="color" @change="colorChange" />
         </div>
         <div class="theme-item bg-color-pick">
-          <p class="title">背景颜色（{{bgColor}}）</p>
+          <p class="title">主题背景（{{bgColor}}）</p>
           <color-pick :color="bgColor" @change="bgColorChange" />
         </div>
       </div>

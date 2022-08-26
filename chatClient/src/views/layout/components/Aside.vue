@@ -78,6 +78,14 @@ export default {
   computed: {
     userInfo() {
       return this.$store.state.user.userInfo
+    },
+    unreadNews () {
+      return this.$store.state.news.unreadNews
+    },
+      validateUnReadCount () {
+      const validateSysUser = (this.$store.state.app.sysUsers || []).find(item => item.code === '111111')
+      const key = (validateSysUser || {})._id + '-' + (this.userInfo || {})._id
+      return this.unreadNews[key]
     }
   },
   methods:{

@@ -4,7 +4,6 @@ import news from './modules/news'
 import sys from './modules/sys'
 import validate from './modules/validate'
 import pyq from './modules/pyq'
-// import user from './modules/user'
 import user from './modules/users'
 import blog from './modules/blog'
 

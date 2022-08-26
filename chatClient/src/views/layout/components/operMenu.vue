@@ -1,10 +1,8 @@
 <template>
   <div class="oper-menu">
     <el-dropdown placement="left">
-      <span class="el-dropdown-link">
-        <el-badge is-dot :value="validateUnReadCount" :hidden="!validateUnReadCount">
-          <i class="oper-item el-icon-s-operation" style="color:#fff"></i>
-        </el-badge>
+      <span class="el-dropdown-link">    
+          <i class="oper-item el-icon-s-operation" style="color:#fff"></i> 
       </span>
       <el-dropdown-menu slot="dropdown">
         <!-- <el-dropdown-item>

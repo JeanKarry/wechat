@@ -5,7 +5,7 @@
     v-if="conversationInfo._id">
     <!-- 群聊 -->
     <template v-if="conversationInfo.isGroup">
-      <div class="conversation-info">
+      <div class="conversation-info" @contextmenu.prevent.stop="showMenu">
         <div class="wrapper">
           <el-badge :value="unreadNews[conversationInfo.roomid]" :hidden="unreadNews[conversationInfo.roomid] === 0"
             class="item el-badge">
@@ -19,10 +19,10 @@
             <!-- 名称 -->
             <span class="top-item primary-font detail-item ellipsis space-bw" style="display: flex;">
               <span class="ellipsis">{{conversationInfo.groupId.title}}</span>
-              <span style="float:right">群组</span>
+              <span style="float:right" v-if="type === 'recent'">群组</span>
             </span>
             <!-- 聊天内容 -->
-            <span class="bottom-item secondary-font detail-item ellipsis space-bw" style="display: flex">
+            <span class=" bottom-item secondary-font detail-item ellipsis space-bw" style="display: flex">
               <span v-if="type === 'fenzu'">
                 {{conversationInfo.groupId.desc}}
               </span>
@@ -34,6 +34,10 @@
             </span>
           </div>
         </div>
+      </div>
+      <div class="menu" v-if="isShowMenu" :style="{'left': menuLeft + 'px', 'top': menuTop + 'px'}">
+        <conversation-menu :conversation="conversationInfo" :type="type" :group="true" @remove="remove"
+          @hiddenMenu="hiddenMenu" />
       </div>
     </template>
     <!-- 联系人 -->
@@ -52,11 +56,11 @@
             <span class="top-item primary-font detail-item ellipsis space-bw" style="display: flex">
               <span class="ellipsis">{{conversationInfo.beizhu ? conversationInfo.beizhu :
                 conversationInfo.nickname}}
-                <i :class="'level '+ 'lv' + conversationInfo.level" ></i>
+                <i :class="'level '+ 'lv' + conversationInfo.level"></i>
               </span>
-              <span style="float:right">好友</span>
+              <span style="float:right" v-if="type === 'recent'">好友</span>
             </span>
-            <span class="bottom-item secondary-font detail-item ellipsis space-bw" style="display: flex">
+            <span class=" bottom-item secondary-font detail-item ellipsis space-bw" style="display: flex">
               <span v-if="type === 'fenzu'">{{conversationInfo.signature}}</span>
               <span v-if="type === 'recent'" style="text-overflow: ellipsis; overflow: hidden;">{{lastNews}}</span>
               <span v-if="type === 'recent' && lastNews" style="margin-left: 5px">{{this.conversationInfo.lastNews.time
@@ -66,7 +70,8 @@
         </div>
       </div>
       <div class="menu" v-if="isShowMenu" :style="{'left': menuLeft + 'px', 'top': menuTop + 'px'}">
-        <conversation-menu :conversation="conversationInfo" :type="type" @remove="remove" @hiddenMenu="hiddenMenu" />
+        <conversation-menu :conversation="conversationInfo" :type="type" :group="false" @remove="remove"
+          @hiddenMenu="hiddenMenu" />
       </div>
     </template>
   </div>
@@ -141,6 +146,8 @@ export default {
     }
   },
   methods: {
+    // 关闭对话---好友和群聊
+    // 好友
     remove() {
       this.isShowMenu = false
       const recentFriendIdsStr = window.localStorage.getItem('coMessager-recentConversation-friend') || ''
@@ -161,7 +168,7 @@ export default {
       this.menuLeft = e.pageX
       this.menuTop = e.pageY
     },
-    hiddenMenu() {
+    hiddenMenu(e) {
       this.isShowMenu = false
     }
   },
@@ -174,6 +181,7 @@ export default {
     conversationMenu
   },
   created() {
+    console.log(this.conversationInfo)
     document.addEventListener('click', () => {
       this.isShowMenu = false
     })

@@ -38,10 +38,10 @@ export default {
     deleteFenzu() {
       this.$emit('deleteFenzu')
       this.$emit('close')
-      this.$message({ type: 'success', message: '删除分组成功！'})
+      this.$message({ type: 'success', message: '删除成功！'})
       this.visible = false
     },
-    cancel(){  
+    cancel(){
       this.$emit('close')
       this.visible = false
     },

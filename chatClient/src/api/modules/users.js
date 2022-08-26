@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 import { API } from './../index'
-
+// 用户接口api
 export default {
   /**登录 */
   login(data) {

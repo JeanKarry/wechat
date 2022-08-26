@@ -1,27 +1,28 @@
 <template>
   <div class="fenzhu-modal-cmp all0">
     <div class="switch-fenzu hor-ver-center" v-loading="confirmLoading">
-      <div class="header">
+      <!-- <div class="header">
         <span class="p-l-t el-icon-circle-plus-outline" @click="showAddFenzu">
           <span class="secondary-font">点击添加分组</span>
         </span>
         <span class="p-r-t el-icon-close" @click="close"></span>
-      </div>
+      </div> -->
+      <div class="title">选择分组</div>
+      <span class="p-r-t el-icon-close" @click="close"></span>
       <div class="fenzu-list">
-        <el-radio-group v-model="selectFenzu" @change="modifyFenzu">
-          <el-radio
-            v-for="(item, index) in fenzuKeys"
-            :key="index" class="item"
-            :label="item"
-            v-model="selectFenzu"
-          >
-            {{item}}（{{userInfo.friendFenzu[item].length}}）
-            <!-- <span class="oper" @click.stop="test">123</span> -->
-          </el-radio>
-        </el-radio-group>
+        <!-- <el-radio-group v-model="selectFenzu" @change="modifyFenzu"> -->
+          <el-radio-group v-model="selectFenzu">
+            <el-radio v-for="(item, index) in fenzuKeys" :key="index" class="item" :label="item" v-model="selectFenzu">
+              {{item}}（{{userInfo.friendFenzu[item].length}}）
+              <!-- <span class="oper" @click.stop="test">123</span> -->
+            </el-radio>
+          </el-radio-group>
+      </div>
+      <div class="footer">
+        <el-button @click="ok" size="mini" style="background:rgb(26, 175, 255);color:#fff;float: right;">确认</el-button>
       </div>
     </div>
-    <el-dialog
+    <!-- <el-dialog
       title="添加分组"
       :visible="isShowAddFenzu"
       width="30%"
@@ -31,7 +32,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="addFenzu">确 定</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -42,7 +43,7 @@ export default {
     return {
       selectFenzu: "",
       confirmLoading: false,
-      isShowAddFenzu: false
+      // isShowAddFenzu: false
     }
   },
   computed: {
@@ -64,7 +65,7 @@ export default {
     }
   },
   methods: {
-    async modifyFenzu() {
+    async ok() {
       if (!this.selectFenzu) return
       this.confirmLoading = true
       const params = {
@@ -77,6 +78,8 @@ export default {
         const userInfo = await this.$http.getUserInfo(this.userInfo._id)
         this.$store.dispatch('user/LOGIN', userInfo.data.data)
         this.confirmLoading = false
+        this.$emit('hidden-fenzu')
+        this.$message({ type: 'success', message: '移动分组成功' })
       }
     },
     close() {
@@ -87,12 +90,6 @@ export default {
     },
     closeAddFenzu() {
       this.isShowAddFenzu = false
-    },
-    addFenzu() {
-      
-    },
-    test() {
-      console.log(123)
     }
   },
   mounted() {
@@ -111,9 +108,14 @@ export default {
   background-color: rgba(0, 0, 0, .2);
   .switch-fenzu {
     width: 300px;
-    padding: 40px 20px 20px;
+    padding: 20px;
     background-color: #fff;
     border-radius: 10px;
+    .title{
+      width: 100%;
+      height: 30px;
+      text-align: center;
+    }
     .fenzu-list {
       .item {
         display: block;

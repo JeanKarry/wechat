@@ -157,6 +157,7 @@ export default {
   mounted() {
     const addPage = document.querySelector('.add-page')
     addPage.addEventListener('scroll', this.hanlerScroll)
+    this.$eventBus.$emit('dispeare',false)
   }
 }
 </script>

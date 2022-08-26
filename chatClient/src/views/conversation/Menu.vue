@@ -9,7 +9,7 @@
       <p>删除好友后聊天记录等信息也会被删除，是否删除？</p>
       <div style="text-align: right; margin: 0">
         <el-button size="mini" type="text" @click="cancel">取消</el-button>
-        <el-button type="primary" size="mini" @click.stop="deleteFriend">确定</el-button>
+        <el-button type="primary" size="mini" @click="deleteFriend">确定</el-button>
       </div>
       <span slot="reference" class="menu-item operation-text delete" @click.stop="()=>{}"
         v-if="type === 'fenzu'">删除好友</span>
@@ -37,7 +37,12 @@ export default {
     },
     viewProfile() {
       this.$http.getUserInfo(this.conversation._id).then(res => {
-        console.log(res)
+        this.$eventBus.$emit('showUserProfile', {
+          show: true,
+          data: {
+            currentConversation: res
+          }
+        })
       })
       // this.$eventBus.$emit('showUserProfile')
     },
@@ -77,8 +82,13 @@ export default {
           message: '删除成功！',
           type: 'success'
         })
+      }else{
+        this.$message({
+          message: '删除失败！',
+          type: 'error'
+        })
       }
-      console.log(data)
+      this.$emit('hiddenMenu')
     }
   },
 }
@@ -89,6 +99,7 @@ export default {
   display: flex;
   flex-direction: column;
   padding: 10px 5px;
+  font-size: 14px;
   .menu-item {
     display: block;
     width: 100%;

@@ -1,16 +1,13 @@
 <template>
   <div class="beizhu-modal-cmp all0">
     <div class="beizhu hor-ver-center" v-loading="confirmLoading">
+      <div class="title">修改备注</div>
       <span class="p-r-t el-icon-close" @click="close"></span>
-      <div class="header">
-        <span class="title">修改备注姓名</span>
-      </div>
       <div class="body">
         <el-input v-model="beizhu" />
       </div>
       <div class="footer">
-        <el-button @click="ok" size="mini" type="success">确认</el-button>
-        <el-button @click="close" size="mini" type="danger">取消</el-button>
+        <el-button @click="ok" size="mini" style="background:rgb(26, 175, 255);color:#fff;float: right;">确认</el-button>
       </div>
     </div>
   </div>
@@ -46,6 +43,7 @@ export default {
         data: {}
       })
       this.confirmLoading = false
+      this.$message({ type: 'success', message: '修改备注成功' })
     },
     close() {
       this.$eventBus.$emit('toggleBeizhuModal', {
@@ -66,9 +64,14 @@ export default {
   background-color: rgba(0, 0, 0, .2);
   .beizhu {
     width: 300px;
-    padding: 10px 20px;
+    padding:20px;
     background-color: #fff;
     border-radius: 10px;
+    .title {
+        width: 100%;
+        height: 30px;
+        text-align: center;
+      }
     .body {
       margin: 10px 0;
     }

@@ -1,33 +1,18 @@
 <template>
   <div class="pop-ups">
-    <user-profile v-if="isShowUserProfile" />
-    <fenzu-modal
-      v-if="isShowFenzuModal"
-      :current-conversation="currentConversation"
-      @hidden-fenzu="hiddenFenzuModal"
-    />
-    <beizhu-modal
-      v-if="isShowBeizhuModal"
-      :current-conversation="currentConversation"
-    />
+    <user-profile v-if="isShowUserProfile" :current-conversation="currentConversation" @hidden-profile="hiddenProfileModal" />
+    <fenzu-modal v-if="isShowFenzuModal" :current-conversation="currentConversation" @hidden-fenzu="hiddenFenzuModal" />
+    <beizhu-modal v-if="isShowBeizhuModal" :current-conversation="currentConversation" />
     <transition name="fade">
-      <bearing-modal
-        v-if="showModal && isShowCreateGroup"
-        @close="$eventBus.$emit('toggleCreateGroup', { show: false })"
-        title="创建群聊"
-        :width="400"
-      >
+      <bearing-modal v-if="showModal && isShowCreateGroup"
+        @close="$eventBus.$emit('toggleCreateGroup', { show: false })" title="创建群聊" :width="400">
         <template slot="body">
           <create-group />
         </template>
       </bearing-modal>
     </transition>
-    <message-text-menu
-      v-if="isShowMsgTextMenu"
-      :message="currentMessage"
-      :left="msgTextMenuLeft"
-      :top="msgTextMenuTop"
-    />
+    <message-text-menu v-if="isShowMsgTextMenu" :message="currentMessage" :left="msgTextMenuLeft"
+      :top="msgTextMenuTop" />
   </div>
 </template>
 
@@ -49,7 +34,6 @@ export default {
       isShowCreateGroup: false,
       isShowMsgTextMenu: false,
       currentConversation: {}, // 当前操作的会话
-
       currentMessage: {}, // 当前操作的消息
       msgTextMenuLeft: 0,
       msgTextMenuTop: 0
@@ -60,13 +44,18 @@ export default {
     hiddenFenzuModal() {
       this.isShowFenzuModal = false
     },
+    hiddenProfileModal () {
+      this.isShowUserProfile = false
+    },
     close() {
       this.showModal = false
     }
   },
   created() {
-    this.$eventBus.$on('showUserProfile', () => {
-      this.isShowUserProfile = true
+    this.$eventBus.$on('showUserProfile', (e) => {
+      const { show, data } = e
+      this.isShowUserProfile = show
+      this.currentConversation = data.currentConversation || {}
     })
     this.$eventBus.$on('toggleFenzuModal', (e) => {
       const { show, data } = e

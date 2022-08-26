@@ -103,6 +103,11 @@ export default {
       this.isSpace = res
       this.isNotify =res
     })
+    this.$eventBus.$on('dispeare',res => {
+      this.isUser = res
+      this.isSpace = res
+      this.isNotify = res
+    })
   },
   components: {
     operMenu

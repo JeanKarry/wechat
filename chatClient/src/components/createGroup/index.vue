@@ -72,7 +72,7 @@ export default {
       if (data.status === 2000) {
         const { groupData } = data.data
         this.$eventBus.$emit('createGroupSuccess')
-        this.$alert(`创建成功！群号是${groupData[0].code}。`, '提示')
+        this.$message({ type: 'success', message: '创建群成功！' })
       } else {
         this.$message({type: 'error', message: '创建群失败！'})
       }

@@ -1,8 +1,5 @@
 <template>
   <div class="setting-page" :style="device === 'Mobile' ? {width: '95%'} : {}">
-    <router-link to="/">
-      <span class="out" @click="handleReturn">❌</span>
-    </router-link>
     <div class="header">
       <div class="avatar">
         <img :src="IMG_URL + userInfo.photo" alt="" srcset="">
@@ -130,9 +127,6 @@ export default {
     }
   },
   methods: {
-    handleReturn () {
-      this.$eventBus.$emit('high', false)
-    },
     setCurrentTab(tab) {
       this.currentTab = tab
     },
@@ -232,6 +226,7 @@ export default {
   created() {
     const userInfo = this.$store.state.user.userInfo
     this.setUserSetting(userInfo)
+    this.$eventBus.$emit('dispeare', false)
   },
 }
 </script>

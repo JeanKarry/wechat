@@ -146,7 +146,7 @@ export default {
 .conversationlist-com {
   height: 100%;
   padding: 0 5px;
-  background-image: url('../../../static/image/004.jpg');
+  background-image: transparent;
   .search {
     padding: 10px 0;
   }

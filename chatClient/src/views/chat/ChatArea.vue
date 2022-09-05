@@ -26,7 +26,7 @@
         <label for="upfile">
           <el-tooltip class="item" effect="dark" content="只能上传小于 2M 的文件" placement="top">
             <i class="item el-icon-folder">
-              <input id="upfile" class="file-inp upload" type="file" title="选择文件" @change="fileInpChange">
+              <input id="upfile" class="file-inp upload" type="file" multiple title="选择文件" @change="fileInpChange">
             </i>
           </el-tooltip>
         </label>
@@ -46,10 +46,10 @@
       <textarea ref="chatInp" class="textarea" v-model="messageText" maxlength="200" @input="scrollBottom = true"
         @keydown.enter="send($event)"></textarea>
       <!-- 上传图片操作的接口事件 -->
-      <!-- <transition name="fade">
+      <transition name="fade">
         <up-img v-if="showUpImgCom" class="emoji-component" :token="token" @getStatus="getImgUploadResult"
           @getLocalUrl="getLocalUrl" :get-status="getImgUploadResult" :get-local-url="getLocalUrl" />
-      </transition> -->
+      </transition>
       <transition name="fade">
         <custom-emoji v-if="showEmojiCom" class="emoji-component" @addemoji="addEmoji" />
       </transition>
@@ -60,7 +60,7 @@
 <script>
 import { mapState } from "vuex"
 import { cloneDeep } from 'lodash'
-import { fromatTime } from "@/utils"
+import { genGuid } from "@/utils"
 import chatHeader from "./components/Header"
 import messageList from "./components/MessageList"
 import { SET_UNREAD_NEWS_TYPE_MAP } from "@/store/constants"
@@ -173,6 +173,7 @@ export default {
       }
       if (res.status === uploadImgStatusMap.complete) {
         const imgKey = res.data.key
+        console.log('imageKe', imgKey);
         let img_URL = ''
         if ((imgKey || '').includes('/uploads/')) {
           img_URL = process.env.IMG_URL + imgKey
@@ -186,6 +187,7 @@ export default {
           message: img_URL,
           messageType: "img", // emoji/text/img/file/sys/artboard/audio/video
         }
+        console.log(JSON.stringify(newMessage));
         msgListClone.forEach(item => {
           if (item.guid === guid) {
             item.uploading = false
@@ -226,8 +228,26 @@ export default {
         }
       })
     },
+    createObjetURL (file, guid) {
+      const url = window.URL.createObjectURL(file)
+      // this.$emit('getLocalUrl', url)
+      this.getLocalUrl(url, guid)
+    },
     fileInpChange(e) {
-
+      const guid = genGuid()
+      const file = e.target.files[0]
+      console.log(file)
+      typeof this.getLocalUrl === 'function' && this.createObjetURL(file, guid)
+      const fileType = file.type && file.type.split("/")[1]
+      const fileSize = file.size / 1024 / 1024
+      const formdata = new FormData()
+      formdata.append('file', file)
+      
+      this.$http.uploadFile(formdata).then(res => {
+        console.log('上传文件结果', res)
+        const { data } = res
+        
+      })
     },
     addEmoji(emoji = '') {
       this.messageText += emoji

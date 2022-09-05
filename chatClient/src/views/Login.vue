@@ -1,14 +1,19 @@
 <template>
   <div class="login-page" :style="'background-image: url('+ bgUrl +')'">
+    <!-- <div class="lock" v-show="lock">
+      <div class="tipsBox">
+        <div class="time">
+          <span style="font-size:28px">{{time}} min </span>
+          <span>后可解锁工作台</span>
+        </div>
+      </div>
+    </div> -->
     <div class="ceshi" style="'marginTop': '30px'">
-      <el-alert :closable="false" show-icon title="测试账号密码" description="账号1：cc1218，密码1：123456 | 账号2：lt0623，密码2：123456" type="success" />
+      <el-alert :closable="false" show-icon title="测试账号密码" description="账号1：cc1218，密码1：123456 | 账号2：lt0623，密码2：123456"
+        type="success" />
     </div>
     <transition name="fade">
-      <avatar-choose
-        v-if="showChooseAvatar"
-        @close="setShowChooseAvatar(false)"
-        @choose="chooseAvatar"
-      />
+      <avatar-choose v-if="showChooseAvatar" @close="setShowChooseAvatar(false)" @choose="chooseAvatar" />
     </transition>
     <div class="wrapper hor-ver-center" :style="device === 'Mobile' ? {width: '90%'}:{}">
       <el-form class="login-form" v-if="isLoginState">
@@ -18,13 +23,16 @@
           </el-avatar>
         </div>
         <el-form-item>
-          <el-input autocomplete="new-password" v-model="loginInfo.account" prefix-icon="el-icon-user" @keydown.enter="login" placeholder="请输入账号"></el-input>
+          <el-input autocomplete="new-password" v-model="loginInfo.account" prefix-icon="el-icon-user"
+            @keydown.enter="login" placeholder="请输入账号"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input autocomplete="new-password" type="password" v-model="loginInfo.password" prefix-icon="el-icon-lock" placeholder="请输入密码"></el-input>
+          <el-input autocomplete="new-password" type="password" v-model="loginInfo.password" prefix-icon="el-icon-lock"
+            placeholder="请输入密码"></el-input>
         </el-form-item>
         <el-form-item class="cv-code">
-          <el-input autocomplete="on" class="cv-code-inp" v-model="loginInfo.cvCode" @keydown.enter.native="login" prefix-icon="el-icon-lock" placeholder="验证码(不区分大小写)"></el-input>
+          <el-input autocomplete="on" class="cv-code-inp" v-model="loginInfo.cvCode" @keydown.enter.native="login"
+            prefix-icon="el-icon-lock" placeholder="验证码(不区分大小写)"></el-input>
           <canvas v-show="!cvCodeing" width="120" height="40" ref="loginCanvas" @click="getCVCode"></canvas>
           <span style="width: 200px" v-show="cvCodeing">获取中...</span>
         </el-form-item>
@@ -44,19 +52,23 @@
           </span>
         </div>
         <el-form-item>
-          <el-input type="text" autocomplete="new-password" v-model="registerInfo.account" prefix-icon="el-icon-user" placeholder="请输入账号"></el-input>
+          <el-input type="text" autocomplete="new-password" v-model="registerInfo.account" prefix-icon="el-icon-user"
+            placeholder="请输入账号"></el-input>
           <!-- <span class="account-errinfo">{{ registerErrInfo.account }}</span> -->
         </el-form-item>
         <el-form-item>
-          <el-input type="text" autocomplete="new-password" onfocus="this.type = 'password'" v-model="registerInfo.password" prefix-icon="el-icon-lock" placeholder="请输入密码"></el-input>
+          <el-input type="text" autocomplete="new-password" onfocus="this.type = 'password'"
+            v-model="registerInfo.password" prefix-icon="el-icon-lock" placeholder="请输入密码"></el-input>
           <!-- <span class="password-errinfo">{{ registerErrInfo.password }}</span> -->
         </el-form-item>
         <el-form-item>
-          <el-input type="text" autocomplete="new-password" onfocus="this.type = 'password'" v-model="registerInfo.rePassword" prefix-icon="el-icon-lock" placeholder="请确认密码"></el-input>
+          <el-input type="text" autocomplete="new-password" onfocus="this.type = 'password'"
+            v-model="registerInfo.rePassword" prefix-icon="el-icon-lock" placeholder="请确认密码"></el-input>
           <!-- <span class="password-errinfo">{{ errInfo.password }}</span> -->
         </el-form-item>
         <el-form-item class="cv-code">
-          <el-input class="cv-code-inp" v-model="registerInfo.cvCode" prefix-icon="el-icon-lock" placeholder="验证码(不区分大小写)"></el-input>
+          <el-input class="cv-code-inp" v-model="registerInfo.cvCode" prefix-icon="el-icon-lock"
+            placeholder="验证码(不区分大小写)"></el-input>
           <canvas width="120" height="40" ref="registerCanvas" @click="getCVCode"></canvas>
         </el-form-item>
         <el-form-item class="oper">
@@ -101,7 +113,10 @@ export default {
       isLoginState: true,
       bgUrl: ocean1,
       showChooseAvatar: false,
-      IMG_URL: process.env.IMG_URL
+      IMG_URL: process.env.IMG_URL,
+      count:0,
+      lock: false,
+      time:30
     }
   },
   computed: {
@@ -114,10 +129,28 @@ export default {
   },
   methods: {
     login() {
+      // 判断是否超过五次输入错误
+      // if (this.count >= 5) {
+      //   this.lock = true
+      //   this.time = 30
+      //   localStorage.setItem('lock', this.lock)
+      //   var timer = setInterval(() => {
+      //     localStorage.setItem('time', this.time)
+      //     this.time -= 1
+      //     if (this.time == 0) {
+      //       this.lock = false
+      //       localStorage.setItem('lock', this.lock)
+      //       localStorage.setItem('time', this.time)
+      //       clearInterval(timer)
+      //     }
+      //   }, 100)
+      // }
       if (!accountReg.test(this.loginInfo.account)) {
+        this.count += 1 
         return this.$message.error('请输入3-6位由数字字母下划线组成的账号')
       }
       if (!passwordReg.test(this.loginInfo.password)) {
+        this.count += 1 
         return this.$message.error('请输入6-64位由数字字母组成的密码')
       }
       const returnCitySN = window.returnCitySN ? window.returnCitySN : {}
@@ -133,6 +166,7 @@ export default {
       this.$http.login(params).then(res => {
         let { status, data, msg } = res.data
         if (status === 1002) { // 验证码错误重新获取验证码
+          this.count += 1
           this.loginInfo.cvCode = ''
           this.getCVCode()
         }
@@ -141,21 +175,22 @@ export default {
           return
         }
         if (res.status === 200 && status === 1000) {
-          this.$message.success('登录成功！')
-          this.$store.dispatch('user/LOGIN', data)
-          const redirect = this.$router.currentRoute.query.redirect
-          const next = redirect ? redirect : '/chat/home'
-          this.$router.replace(next)
-        } else {
-          this.$message.error(msg)
-          if (status === 1006 || status === 1007) {
-            this.$confirm(`你的${msg}，如需恢复请联系管理员：ccdebuging@gmail.com`, `通知：${msg}`, {
-              // confirmButtonText: '确定',
-              // cancelButtonText: '取消',
-              type: 'error'
-            })
+            localStorage.setItem('lock',false)
+            this.$message.success('登录成功！')
+            this.$store.dispatch('user/LOGIN', data)
+            const redirect = this.$router.currentRoute.query.redirect
+            const next = redirect ? redirect : '/chat/home'
+            this.$router.replace(next)
+          } else {
+            this.$message.error(msg)
+            if (status === 1006 || status === 1007) {
+              this.$confirm(`你的${msg}，如需恢复请联系管理员：ccdebuging@gmail.com`, `通知：${msg}`, {
+                // confirmButtonText: '确定',
+                // cancelButtonText: '取消',
+                type: 'error'
+              })
+            }
           }
-        }
       })
     },
     register() {
@@ -174,7 +209,7 @@ export default {
           this.$message.error(msg)
           status === 1002 ? this.getCVCode() : ''
         } else if (status === 1005) {
-          this.$alert(`这是你的chat账号:${data}，你可以以此账号登录系统`, '注册成功')
+          // this.$alert(`这是你的chat账号:${data}，你可以以此账号登录系统`, '注册成功')
           this.changeState(true)
         }
       })
@@ -211,7 +246,15 @@ export default {
   async mounted() {
     this.getCVCode()
     this.$socket.emit('leave')
-  }
+  },
+  // created(){
+  //   this.lock = localStorage.getItem('lock')
+  //   this.time = localStorage.getItem('time')
+  //   console.log(this.lock)
+  //   if(this.time == 0){
+
+  //   }
+  // }
 };
 </script>
 
@@ -223,6 +266,39 @@ export default {
   background-repeat: no-repeat;
   background-size: cover;
   transition: all .8s ease;
+  .lock{
+      position: absolute;
+      z-index: 1000;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.521);
+      .tipsBox{
+          position: absolute;
+          background-image: url('../../static/image/duihuak.png');
+          width: 530px;
+          height: 430px;
+          background-size: cover;
+          left: 50%;
+          margin-left: -270px;
+          top: 170px;
+          text-align: center;
+          .time {
+              font-size: 22px;
+              display: flex;
+              height: 200px;
+              line-height: 80px;
+              flex-direction: column;
+              letter-spacing: 5px;
+              margin-top: 200px;
+              font-weight: bold;
+          
+              span {
+                display: inline-block;
+                height: 50px;
+              }
+            }
+      }
+  }
   .ceshi {
     display: none;
     position: absolute;

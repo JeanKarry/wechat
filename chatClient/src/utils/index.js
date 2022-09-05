@@ -303,11 +303,12 @@ export const localImgToBase64 = (fileDom) => {
     if (!imgTypeArr.includes(fileType)) {
       reject('只能上传图片！')
     }
-    if (fileSize > 0.5) {
-      reject('只能上传小于0.5M的图片！')
+    if (fileSize > 2) {
+      reject('只能上传小于2M的图片！')
     }
     console.log(file)
     const imgFileReader = new  FileReader()
+    
     imgFileReader.readAsDataURL(file)
     imgFileReader.onload = (e) => {
       const data = e.target.result

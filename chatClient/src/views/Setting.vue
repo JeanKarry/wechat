@@ -42,7 +42,7 @@
                 <input type="text" style="color:#000" :ref="item" v-model="userSetting[item]">
               </template>
             </div>
-            <!-- <div class="action">
+            <div class="action">
               <span v-show="!isModifying[item]" class="operation-text" @click="setModily(item, true)">
                 修改
               </span>
@@ -50,13 +50,13 @@
                 <el-button type="primary" size="small" @click="saveModify(item)">保存</el-button>
                 <el-button type="error" size="small" @click="setModily(item, false)">取消</el-button>
               </div>
-            </div> -->
+            </div>
           </li>
-          <div class="action">
+          <!-- <div class="action">
             <div class="oper">
               <el-button type="primary" size="small" @click="saveModify()">确认</el-button>
             </div>
-          </div>
+          </div> -->
         </ul>
         <ul v-show="currentTab === 'password'" class="user-password">
           <li class="pwd-item" v-for="(value, key) in pwdMap" :key="key">

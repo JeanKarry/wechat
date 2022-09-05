@@ -15,7 +15,7 @@ export const searchObjectMap = [
 
 export const searchTypes = {
   friend: [
-    {id: 1, label: 'Chat账号', value: 'code'},
+    // {id: 1, label: 'Chat账号', value: 'code'},
     {id: 2, label: '用户账号', value: 'name'},
     {id: 3, label: '昵称', value: 'nickname'}
   ],

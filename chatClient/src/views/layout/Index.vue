@@ -8,9 +8,9 @@
         <!-- <my-header></my-header> -->
         <!-- filter-bgc是用于设置背景虚化的，因为使用了filter以及transform后fixed会改变 -->
         <div v-if="!device === 'Mobile'" class="filter-bgc" v-css="{
-            'filter': 'blur(' + blur + 'px)',
-            'background-image': 'url(' + bgImgUrl + ')'
-          }" />
+          'filter': 'blur(' + blur + 'px)',
+          'background-image': 'url(' + bgImgUrl + ')'
+        }" />
         <el-main
           :class="isZoom ? (device === 'Mobile' ? 'co-messager-main mobile' : 'co-messager-main zoom') : (device === 'Mobile' ? 'co-messager-main mobile' : 'co-messager-main') "
           v-css=" opacity !== 1 ? {'opacity': opacity} : {}">
@@ -69,11 +69,12 @@ export default {
   name: 'Layout',
   data() {
     return {
+      time:30,
       isZoom:false,
       include: ['Home'], // keepAlive缓存相关
       bgImgUrl: '',
       NotifyAudio: '',
-      // notifySound: '',
+      notifySound: '',
       showTheme: false,
       showMain: true, // 聊天区域是否展示
       asideTranslateX: -70,
@@ -281,7 +282,7 @@ export default {
       border: 1px solid #ffffff;
       border-radius: 50%;
     }
-  }
+  } 
   .co-messager-layout {
     box-sizing: border-box;
     height: 100%;

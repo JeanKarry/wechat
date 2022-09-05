@@ -1,7 +1,7 @@
 <template>
   <div class="custom-upload-img-com">
     <div class="upload-img-com-wrapper" v-show="useType !== 'slot'">
-      <el-alert title="只能上传小于 1M 的图片" type="warning" effect="dark" :closable="false" />
+      <!-- <el-alert title="只能上传小于 1M 的图片" type="warning" effect="dark" :closable="false" /> -->
       <div class="option">
         <!-- <input type="file" @change="uploadServer" name="" id=""> -->
         <label for="up-to-server">
@@ -16,7 +16,7 @@
             >
           </i>
         </label>
-        <label for="up-to-qiniu">
+        <!-- <label for="up-to-qiniu">
           <i class="option-item ok el-icon-picture">上传七牛云
             <input
               id="up-to-qiniu"
@@ -27,7 +27,7 @@
               @change="uploadQiniu"
             >
           </i>
-        </label>
+        </label> -->
       </div>
     </div>
     <slot v-bind:trigger="customTriggerInp" />
@@ -56,44 +56,44 @@ export default {
       this.getLocalUrl(url, guid)
     },
     /**上传至七牛云 */
-    uploadQiniu(e) {
-      const guid = genGuid()
-      const [file] = e.target.files
-      typeof this.getLocalUrl === 'function' && this.createObjetURL(file, guid)
-      // return
-      const fileType = file.type && file.type.split("/")[1]
-      const fileSize = file.size / 1024 / 1024
-      if (fileSize > 1) {
-        this.$message.error('只能上传小于1M的图片！换一个小图片试试吧~~')
-        return
-      }
-      const putExtra = {
-        fname: "",
-        params: "",
-        mineType: ["image/png", "image/jpeg", "image/gif"]
-      }
-      const config = {
-        useCdnDomain: true
-      }
-      const error = (err) => {
-        this.getStatus({status: uploadImgStatusMap.error, data: err, guid})
-      }
-      const next = (res) => {
-        // console.log(res)
-        this.getStatus({status: uploadImgStatusMap.next, data: res, guid})
-      }
-      const complete = (res) => {
-        this.getStatus({status: uploadImgStatusMap.complete, data: res, guid})
-      }
-      const subObject = {
-        next,
-        error,
-        complete
-      }
-      const imgName = imgRandomName() + '.' + fileType
-      const observable = window.qiniu.upload(file, imgName, this.token, putExtra, config)
-      const subScription = observable.subscribe(subObject)
-    },
+    // uploadQiniu(e) {
+    //   const guid = genGuid()
+    //   const [file] = e.target.files
+    //   typeof this.getLocalUrl === 'function' && this.createObjetURL(file, guid)
+    //   // return
+    //   const fileType = file.type && file.type.split("/")[1]
+    //   const fileSize = file.size / 1024 / 1024
+    //   if (fileSize > 1) {
+    //     this.$message.error('只能上传小于1M的图片！换一个小图片试试吧~~')
+    //     return
+    //   }
+    //   const putExtra = {
+    //     fname: "",
+    //     params: "",
+    //     mineType: ["image/png", "image/jpeg", "image/gif"]
+    //   }
+    //   const config = {
+    //     useCdnDomain: true
+    //   }
+    //   const error = (err) => {
+    //     this.getStatus({status: uploadImgStatusMap.error, data: err, guid})
+    //   }
+    //   const next = (res) => {
+    //     // console.log(res)
+    //     this.getStatus({status: uploadImgStatusMap.next, data: res, guid})
+    //   }
+    //   const complete = (res) => {
+    //     this.getStatus({status: uploadImgStatusMap.complete, data: res, guid})
+    //   }
+    //   const subObject = {
+    //     next,
+    //     error,
+    //     complete
+    //   }
+    //   const imgName = imgRandomName() + '.' + fileType
+    //   const observable = window.qiniu.upload(file, imgName, this.token, putExtra, config)
+    //   const subScription = observable.subscribe(subObject)
+    // },
     /**上传至本地服务器 */
     uploadServer(e) {
       if (isProduction()) {
@@ -128,20 +128,20 @@ export default {
     padding: 10px;
     .option {
       margin-top: 10px;
-      text-align: right;
+      text-align: left;
       .option-item {
         display: inline-block;
-        padding: 5px;
-        background-color: #c35673;
+        padding: 5px 10px;
+        background-color: rgb(26, 175, 255);
         color: #fff;
         height: 40px;
         line-height: 30px;
         text-align: center;
         cursor: pointer;
-        border-radius: 5px;
-        &::before {
-          margin-right: 5px;
-        }
+        border-radius: 2px;
+        // &::before {
+        //   margin-right: 5px;
+        // }
       }
       .img-inp {
         display: none;

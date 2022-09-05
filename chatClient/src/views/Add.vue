@@ -52,7 +52,7 @@ export default {
       searchObjectMap,
       searchTypes,
       searchObject: 'friend',
-      searchType: 'code',
+      searchType: 'name',
       isFetch: false,
       searchList: [],
       hasMore: true,

@@ -1,13 +1,13 @@
 <template>
   <div class="login-page" :style="'background-image: url('+ bgUrl +')'">
-    <!-- <div class="lock" v-show="lock">
+    <div class="lock" v-show="lock">
       <div class="tipsBox">
         <div class="time">
           <span style="font-size:28px">{{time}} min </span>
           <span>后可解锁工作台</span>
         </div>
       </div>
-    </div> -->
+    </div>
     <div class="ceshi" style="'marginTop': '30px'">
       <el-alert :closable="false" show-icon title="测试账号密码" description="账号1：cc1218，密码1：123456 | 账号2：lt0623，密码2：123456"
         type="success" />
@@ -130,28 +130,26 @@ export default {
   methods: {
     login() {
       // 判断是否超过五次输入错误
-      // if (this.count >= 5) {
-      //   this.lock = true
-      //   this.time = 30
-      //   localStorage.setItem('lock', this.lock)
-      //   var timer = setInterval(() => {
-      //     localStorage.setItem('time', this.time)
-      //     this.time -= 1
-      //     if (this.time == 0) {
-      //       this.lock = false
-      //       localStorage.setItem('lock', this.lock)
-      //       localStorage.setItem('time', this.time)
-      //       clearInterval(timer)
-      //     }
-      //   }, 100)
-      // }
+      if (this.count >= 5) {
+        this.lock = true
+        this.time = 30
+        localStorage.setItem('lock', true)
+        var timer = setInterval(() => {
+          localStorage.setItem('time', this.time)
+          this.time -= 1
+          if (this.time == 0) {
+            this.lock = false
+            localStorage.setItem('lock', this.lock)
+            localStorage.setItem('time', this.time)
+            clearInterval(timer)
+          }
+        }, 100)
+      }
       if (!accountReg.test(this.loginInfo.account)) {
         this.count += 1 
-        return this.$message.error('请输入3-6位由数字字母下划线组成的账号')
       }
       if (!passwordReg.test(this.loginInfo.password)) {
         this.count += 1 
-        return this.$message.error('请输入6-64位由数字字母组成的密码')
       }
       const returnCitySN = window.returnCitySN ? window.returnCitySN : {}
       const params = {
@@ -195,10 +193,10 @@ export default {
     },
     register() {
       if (!accountReg.test(this.registerInfo.account)) {
-        return this.$message.error('请输入3-6位由数字字母下划线组成的账号')
+        return this.$message.error('请输入3-12位的账号')
       }
       if (!passwordReg.test(this.registerInfo.password)) {
-        return this.$message.error('请输入6-64位由数字字母组成的密码')
+        return this.$message.error('请输入8-12位由数字大小写字母特殊字符组成的密码')
       }
       if (this.registerInfo.password !== this.registerInfo.rePassword) {
         return this.$message.error('两次输入的密码不一致')
@@ -247,14 +245,14 @@ export default {
     this.getCVCode()
     this.$socket.emit('leave')
   },
-  // created(){
-  //   this.lock = localStorage.getItem('lock')
-  //   this.time = localStorage.getItem('time')
-  //   console.log(this.lock)
-  //   if(this.time == 0){
+  created(){
+    this.lock = localStorage.getItem('lock')
+    this.time = localStorage.getItem('time')
+    console.log(this.lock)
+    if(this.time == 0){
 
-  //   }
-  // }
+    }
+  }
 };
 </script>
 

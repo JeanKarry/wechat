@@ -69,8 +69,8 @@ export function isProduction() {
 }
 
 // 登录注册时的验证
-export const accountReg = /^[\w\d_]{3,6}/
-export const passwordReg = /^[\w\d]{6,14}/
+export const accountReg = /^[\u4e00-\u9fa5_a-zA-Z0-9]{3,12}/
+export const passwordReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@!~%^&*])[a-zA-Z\d#@!~%^&*]{8,12}/
 
 /**
  * 格式化日期

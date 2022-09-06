@@ -62,7 +62,7 @@ import { MSG_TYPES } from '@/const'
 import { formatDateToZH } from '@/utils'
 import messageTypes, { messageTypesCmp } from '@/components/messageTypes'
 export default {
-  props: ["messageitem", "imgTypeMsgList", "currentConversation", "lastEnterTime", "setLastEnterTime"],
+  props: ["messageitem", "imgTypeMsgList", "currentConversation", "lastEnterTime", "setLastEnterTime",'filename'],
   data() {
     return {
       IMG_URL: process.env.IMG_URL,

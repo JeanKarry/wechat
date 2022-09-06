@@ -101,6 +101,7 @@ export default {
       }
       const guid = genGuid()
       const file = e.target.files[0]
+      console.log(file)
       typeof this.getLocalUrl === 'function' && this.createObjetURL(file, guid)
       const fileType = file.type && file.type.split("/")[1]
       const fileSize = file.size / 1024 / 1024
@@ -123,7 +124,7 @@ export default {
 <style lang="scss">
 .custom-upload-img-com {
   width: 270px;
-  background-color: #fff;
+  background-color:transparent;
   .upload-img-com-wrapper {
     padding: 10px;
     .option {

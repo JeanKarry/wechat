@@ -16,13 +16,18 @@
       </div>
       <div class="group-desc" v-if="device !== 'Mobile' && currentConversation.conversationType === 'GROUP'">
         <!-- 群聊消息区域 -->
-        <group-desc :currentConversation="currentConversation" :key="datetamp" />
+        <group-desc :currentConversation="currentConversation" :key="datetamp" :filename="filename" />
       </div>
     </div>
     <div class="message-edit-container">
       <div class="send-type">
         <i class="item iconfont icon-emoji" @click.stop="showEmojiCom = !showEmojiCom" title="emoji表情"></i>
-        <i class="item el-icon-picture" @click.stop="showUpImgCom = !showUpImgCom" title="选择图片" />
+        <label for="up-to-server">
+          <i class="item el-icon-picture" @click.stop="showUpImgCom = !showUpImgCom" title="选择图片">
+            <input id="up-to-server" class="img-inp upload" type="file" title="选择图片"
+              accept="image/png, image/jpeg, image/gif, image/jpg" @change="uploadServer">
+            </i>
+        </label>
         <label for="upfile">
           <el-tooltip class="item" effect="dark" content="只能上传小于 2M 的文件" placement="top">
             <i class="item el-icon-folder">
@@ -46,10 +51,10 @@
       <textarea ref="chatInp" class="textarea" v-model="messageText" maxlength="200" @input="scrollBottom = true"
         @keydown.enter="send($event)"></textarea>
       <!-- 上传图片操作的接口事件 -->
-      <transition name="fade">
+      <!-- <transition name="fade">
         <up-img v-if="showUpImgCom" class="emoji-component" :token="token" @getStatus="getImgUploadResult"
           @getLocalUrl="getLocalUrl" :get-status="getImgUploadResult" :get-local-url="getLocalUrl" />
-      </transition>
+      </transition> -->
       <transition name="fade">
         <custom-emoji v-if="showEmojiCom" class="emoji-component" @addemoji="addEmoji" />
       </transition>
@@ -81,6 +86,7 @@ export default {
     return {
       messageText: "",
       messages: [],
+      filename:'',
       showEmojiCom: false,
       showUpImgCom: false,
       token: '', // 上传七牛云所需token
@@ -101,6 +107,7 @@ export default {
       userInfo: "userInfo"
     }),
     messagesOutcome() {
+      console.log(this.messages)
       return this.messages.filter(item => {
         return item.roomid === this.currentConversation.roomid
       })
@@ -151,8 +158,10 @@ export default {
         currentConversation: this.currentConversation
       }
     },
+    // 获取图片上传状态及进度
     getImgUploadResult(res) {
       const { guid } = res // 图片的唯一标识
+      console.log(guid)
       const msgListClone = cloneDeep(this.messages)
       if (res.status === uploadImgStatusMap.error) {
         this.$message.error('图片上传失败！')
@@ -173,12 +182,13 @@ export default {
       }
       if (res.status === uploadImgStatusMap.complete) {
         const imgKey = res.data.key
-        console.log('imageKe', imgKey);
         let img_URL = ''
         if ((imgKey || '').includes('/uploads/')) {
           img_URL = process.env.IMG_URL + imgKey
+          console.log('one',img_URL)
         } else {
           img_URL = qiniu_URL + imgKey
+          console.log('two',img_URL)
         }
         // const img_URL = qiniu_URL + res.data.key
         const common = this.generatorMessageCommon()
@@ -187,7 +197,6 @@ export default {
           message: img_URL,
           messageType: "img", // emoji/text/img/file/sys/artboard/audio/video
         }
-        console.log(JSON.stringify(newMessage));
         msgListClone.forEach(item => {
           if (item.guid === guid) {
             item.uploading = false
@@ -228,26 +237,126 @@ export default {
         }
       })
     },
-    createObjetURL (file, guid) {
-      const url = window.URL.createObjectURL(file)
-      // this.$emit('getLocalUrl', url)
-      this.getLocalUrl(url, guid)
-    },
-    fileInpChange(e) {
+     uploadServer(e) {
       const guid = genGuid()
       const file = e.target.files[0]
-      console.log(file)
-      typeof this.getLocalUrl === 'function' && this.createObjetURL(file, guid)
+      const url = window.URL.createObjectURL(file)
+      this.getLocalUrl(url,guid)
+      // typeof this.getLocalUrl === 'function' && this.createObjetURL(file, guid)
       const fileType = file.type && file.type.split("/")[1]
       const fileSize = file.size / 1024 / 1024
       const formdata = new FormData()
       formdata.append('file', file)
-      
       this.$http.uploadFile(formdata).then(res => {
         console.log('上传文件结果', res)
         const { data } = res
-        
+        if (data.status === 2000) {
+          this.getImgUploadResult({status: uploadImgStatusMap.complete, data: {key: data.data}, guid})
+        } 
       })
+    },
+    // 获取文件上传地址
+    getLocalFileUrl(url, guid) {
+      // return
+      const common = this.generatorMessageCommon()
+      const newMessage = {
+        ...common,
+        uploading: true,
+        guid,
+        message: url,
+        messageType: "file",
+      }
+      this.messages = [...this.messages, newMessage]
+      this.$store.dispatch('news/SET_LAST_NEWS', {
+        type: 'edit',
+        res: {
+          roomid: this.currentConversation.roomid,
+          news: newMessage
+        }
+      })
+    },
+    // 点击文件上传的事件回调
+    fileInpChange(e) {
+      const guid = genGuid()
+      console.log(guid,2)
+      const file = e.target.files[0]
+      const fileurl = window.URL.createObjectURL(file)
+      this.getLocalFileUrl(fileurl,guid)
+      console.log(fileurl)
+      // typeof this.getLocalUrl === 'function' && this.createObjetURL(file, guid)
+      const fileType = file.type && file.type.split("/")[1]
+      const fileSize = file.size / 1024 / 1024
+      const formdata = new FormData()
+      formdata.append('file', file) 
+      this.$http.uploadFile(formdata).then(res => {
+        console.log('上传文件结果', res)
+        const { data } = res
+        console.log(data)
+        this.getFileUploadResult({status: uploadImgStatusMap.complete, data: {key: data.data}, guid})
+      })
+      
+    },
+    // 获取文件的上传进度以及路径
+    getFileUploadResult(res) {
+       console.log('00000000000000000000000')
+      const { guid } = res // 图片的唯一标识
+      const msgListClone = cloneDeep(this.messages)
+      if (res.status === uploadImgStatusMap.error) {
+        this.$message.error('文件上传失败！')
+        return
+      }
+      if (res.status === uploadImgStatusMap.next) {
+        const percent = Number((res.data && res.data.total && res.data.total.percent) || 0).toFixed(2)
+        const loaded = (res.data && res.data.total && res.data.total.loaded) || 0
+        const size = (res.data && res.data.total && res.data.total.size) || 0
+        console.log(`文件大小：${size}，已上传：${loaded}，百分比：${percent}`)
+        msgListClone.forEach(item => {
+          if (item.guid === guid) {
+            item.uploadPercent = Number(percent)
+          }
+        })
+        this.messages = msgListClone
+        return
+      }
+      if (res.status === uploadImgStatusMap.complete) {
+        const imgKey = res.data.key
+        console.log('imageKe', imgKey);
+        this.filename = imgKey
+        // console.log(this.filename)
+        let img_URL = ''
+        if ((imgKey || '').includes('/uploads/')) {
+          img_URL = process.env.IMG_URL + imgKey
+        } else {
+          img_URL = qiniu_URL + imgKey
+        }
+        // const img_URL = qiniu_URL + res.data.key
+        const common = this.generatorMessageCommon()
+        const newMessage = {
+          ...common,
+          message: img_URL,
+          messageType: "file", // emoji/text/img/file/sys/artboard/audio/video
+        }
+        console.log(JSON.stringify(newMessage));
+        msgListClone.forEach(item => {
+          if (item.guid === guid) {
+            item.uploading = false
+            delete item.uploadPercent
+          }
+        })
+        this.messages = msgListClone
+        this.messages = [...msgListClone,{
+          filename:this.filename
+        }]
+        this.$socket.emit("sendNewMessage", newMessage)
+        this.$store.dispatch('news/SET_LAST_NEWS', {
+          type: 'edit',
+          res: {
+            roomid: this.currentConversation.roomid,
+            news: newMessage
+          }
+        })
+        this.messageText = ""
+      }
     },
     addEmoji(emoji = '') {
       this.messageText += emoji
